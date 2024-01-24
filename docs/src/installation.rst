@@ -16,10 +16,10 @@ Just add in the first cell of your notebook:
 .. code-block:: python
 
     # Download and install latest version of the package
-    !pip install --upgrade git+https://github.com/jparisu/IArena_searching.git
+    !pip install --upgrade git+https://github.com/jparisu/sIArena.git
 
     # Or to download a specific version
-    !pip install --upgrade git+https://github.com/jparisu/IArena_searching.git@v0.1
+    !pip install --upgrade git+https://github.com/jparisu/sIArena.git@v0.1
 
 This will install the specific version of the package and make it available in the rest of the cells of your notebook.
 
@@ -36,7 +36,7 @@ From a command prompt, you can install it in a conda environment inside Anaconda
 .. code-block:: bash
 
     conda install git
-    pip install --upgrade git+https://github.com/jparisu/IArena_searching.git@v0.1
+    pip install --upgrade git+https://github.com/jparisu/sIArena.git@v0.1
 
 
 ===========

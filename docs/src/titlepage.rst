@@ -11,7 +11,7 @@ It is developed with educational and research purposes related with **computer s
 Overview
 ========
 
-**IArena Searching** is a *Python* library that provides a framework for developing and testing searching algorithms.
+**sIArena** or **IArena Searching** is a *Python* library that provides a framework for developing and testing searching algorithms.
 The main idea is to be able to test robustness and efficiency of algorithms and heuristics in different terrains.
 
 ----

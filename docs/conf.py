@@ -1,4 +1,4 @@
-project = 'IArena Searching'
+project = 'sIArena'
 author = 'jparisu'
 
 extensions = ['sphinx.ext.autodoc']

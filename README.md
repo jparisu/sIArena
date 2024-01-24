@@ -1,6 +1,6 @@
 # IArena Searching
 
-[![Documentation Status](https://readthedocs.org/projects/iarena_searching/badge/?version=latest)](https://iarena_searching.readthedocs.io/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/sIArena/badge/?version=latest)](https://sIArena.readthedocs.io/en/latest/)
 
 Educational motive repository form searching algorithms.
 
@@ -8,4 +8,4 @@ Educational motive repository form searching algorithms.
 
 ## Documentation
 
-The documentation is available at [Read the Docs](https://iarena_searching.readthedocs.io/en/latest/).
+The documentation is available at [Read the Docs](https://sIArena.readthedocs.io/en/latest/).
