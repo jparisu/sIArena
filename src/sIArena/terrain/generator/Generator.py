@@ -38,11 +38,15 @@ class TerrainGenerator:
         m = scalade(m, min_height, vmax)
 
         # Convert the matrix to integers using numpy
-        m = np.array(m, dtype=int)
+        final_m = np.zeros(m.shape, dtype=int)
+        for i in range(m.shape[0]):
+            for j in range(m.shape[1]):
+                final_m[i,j] = round(m[i,j])
 
-        m *= min_step
+        final_m *= min_step
 
-        return Terrain(m, origin=origin, destination=destination)
+        return Terrain(final_m, origin=origin, destination=destination)
+
 
     @pure_virtual
     def generate_random_matrix_(

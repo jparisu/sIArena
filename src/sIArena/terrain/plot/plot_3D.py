@@ -10,7 +10,8 @@ def plot_terrain_3D(
             terrain: Terrain,
             angles: List[tuple] = [(45, 45), (45, 225)],
             paths: List[Path] = [],
-            colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b']):
+            colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b'],
+            cmap: str = 'terrain'):
     """Plots the terrain and the given paths"""
 
     fig = plt.figure(figsize=(18, 6))
@@ -30,7 +31,7 @@ def plot_terrain_3D(
         Z = np_matrix[X, Y]
 
         # Plot the surface
-        ax.plot_surface(X, Y, Z, cmap='terrain')
+        ax.plot_surface(X, Y, Z, cmap=cmap)
 
         # Plot the origin point
         ax.plot([terrain.origin[0]], [terrain.origin[1]], [terrain[terrain.origin]], 'r+', markersize=5, zorder=6)

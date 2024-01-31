@@ -8,7 +8,8 @@ def measure_function(
             search_function,
             terrain: Terrain,
             iterations: int = 1,
-            debug: bool = False
+            debug: bool = False,
+            max_seconds: float = 60*5
         ) -> Tuple[int, float, Path]:
     """
     This function uses a search function to calculate a path from the beggining to the end of a terrain.
@@ -35,6 +36,7 @@ def measure_function(
         if debug:
             print(f"Running iteration {i}...")
 
+        # TODO add max time stop
         timer = Timer()
         path = search_function(terrain)
         times.append(timer.elapsed_s())

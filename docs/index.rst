@@ -6,5 +6,13 @@
    :maxdepth: 2
    :hidden:
 
-   /src/getting_started
    /src/installation
+   /src/tutorial
+   /src/tlnr
+
+.. toctree::
+   :caption: Elements
+   :maxdepth: 2
+   :hidden:
+
+   /src/elements/elements

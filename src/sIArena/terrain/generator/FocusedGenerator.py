@@ -44,8 +44,6 @@ class FocusedGenerator(TerrainGenerator):
                 matrix[i][j] = FocusedGenerator.focused_value_generator(
                     [matrix[i - 1][j], matrix[i][j - 1]], abruptness)
 
-        print(matrix)
-
         return matrix
 
 

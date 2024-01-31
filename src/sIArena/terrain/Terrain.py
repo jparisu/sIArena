@@ -43,9 +43,13 @@ class Terrain:
 
         if self.origin is None:
             self.origin = (0, 0)
+        else:
+            self.origin = (origin[0], origin[1])
 
         if self.destination is None:
             self.destination = (self.n - 1, self.m - 1)
+        else:
+            self.destination = (destination[0], destination[1])
 
         # Check that the origin is valid
         if self.origin[0] < 0 and self.origin[0] >= self.n:
