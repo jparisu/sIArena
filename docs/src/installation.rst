@@ -31,7 +31,7 @@ Install in Windows Anaconda
 In order to install the package in Windows Anaconda, the steps are the same as for :ref:`installation_googlecolab`.
 The only detail is that ``git`` may not be installed by default in Anaconda.
 
-From a command prompt, you can install it in a conda environment inside Anaconda:
+From a command prompt, you can install it in a ``conda`` environment inside Anaconda:
 
 .. code-block:: bash
 

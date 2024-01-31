@@ -31,4 +31,4 @@ jobs:
 
     - name: Check spelling
       run: |
-        sphinx-build -W --keep-going -b spelling docs/ docs/_build/spelling
+        sphinx-build -W --keep-going -b spelling docs/ docs/_build/spelling docs/.spelling/spelling_wordlist.txt
