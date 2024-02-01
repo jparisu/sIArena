@@ -20,8 +20,8 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Install package from GitHub
-      run: pip install --upgrade git+https://github.com/jparisu/sIArena.git
+    - name: Install package from current branch
+      run: pip install --upgrade git+https://github.com/jparisu/sIArena.git@${GITHUB_REF#refs/heads/}
 
     # TODO: add tests
     # - name: Run tests
