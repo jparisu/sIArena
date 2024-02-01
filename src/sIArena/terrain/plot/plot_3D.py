@@ -58,5 +58,5 @@ def plot_terrain_3D(
         ax.set_xlabel('row')
         ax.set_ylabel('col')
 
-    fig.title(title)
+    fig.suptitle(title)
     plt.show()

@@ -1,4 +1,6 @@
 import math
+import threading
+import time
 from typing import List, Tuple
 
 from sIArena.terrain.Terrain import Coordinate, Terrain, Path
@@ -25,7 +27,9 @@ def measure_function(
     - The average time that the function has elapsed to find it
     """
 
-    # A paused timer to measure time
+    # Function to return the result as a parameter
+    def func_wrapper(func, terrain, result):
+        result.append(func(terrain))
 
     best_path_cost = math.inf
     best_path = None
@@ -36,10 +40,26 @@ def measure_function(
         if debug:
             print(f"Running iteration {i}...")
 
-        # TODO add max time stop
+        # List for the result of the function
+        result = []
+
+        # Thread with timeout
+        thread = threading.Thread(target=func_wrapper, args=(search_function, terrain, result,))
+
+        # Start timer
         timer = Timer()
-        path = search_function(terrain)
+
+        # Start thread
+        thread.start()
+        thread.join(timeout=max_seconds)
+
+        # Store time
         times.append(timer.elapsed_s())
+
+        if thread.is_alive():
+            raise TimeoutError(f"Function {search_function.__name__} took more than {max_seconds} seconds to finish.")
+        else:
+            path = result[0]
 
         if not terrain.is_full_path(path):
             raise ValueError(f"Found Incorrect path with function {search_function.__name__}: {path}")

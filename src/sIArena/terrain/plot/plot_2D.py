@@ -7,6 +7,8 @@ from sIArena.terrain.Terrain import Coordinate, Terrain, Path
 def plot_terrain_2D(
             terrain: Terrain,
             paths: List[Path] = [],
+            paths_legends: List[str] = None,
+            use_cost_as_path_legend: bool = False,
             colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b'],
             cmap: str = 'terrain',
             title: str = 'Terrain',
@@ -20,16 +22,29 @@ def plot_terrain_2D(
     plt.plot(terrain.origin[1], terrain.origin[0], 'r+')
     plt.plot(terrain.destination[1], terrain.destination[0], 'rx')
 
+    # Set path legends if unset
+    paths_legends_ = paths_legends
+    if paths_legends_ is None:
+        paths_legends_ = [""]
+    while len(paths_legends_) < len(paths):
+        paths_legends_.append("")
+
     # Plot the paths
     for i, p in enumerate(paths):
+        if use_cost_as_path_legend:
+            paths_legends_[i] = f'{paths_legends_[i]} ({terrain.get_path_cost(p)})'
         plt.plot(
             [pos[1] for pos in p],
             [pos[0] for pos in p],
-            colors[i % len(colors)])
+            colors[i % len(colors)],
+            label=paths_legends_[i],)
 
     plt.xlabel('row')
     plt.ylabel('col')
     plt.title(title)
+
+    if paths_legends or use_cost_as_path_legend:
+        plt.legend()
 
     plt.colorbar()
     plt.show(block=False)

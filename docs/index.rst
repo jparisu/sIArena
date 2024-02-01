@@ -1,4 +1,8 @@
 
+#####################
+sIArena Documentation
+#####################
+
 .. include:: /rst/titlepage.rst
 
 
