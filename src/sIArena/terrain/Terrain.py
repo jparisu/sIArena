@@ -149,6 +149,9 @@ class Terrain:
 
     def is_valid_path(self, path: Path) -> bool:
         """Returns True if the given path is valid"""
+        if path is None or len(path) == 0:
+            return False
+
         for i in range(len(path) - 1):
             if path[i + 1] not in self.get_neighbors(path[i]):
                 return False
