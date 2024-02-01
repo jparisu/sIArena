@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="sIArena",
-    description="IArena searching"
+    description="IArena searching",
     author="jparisu",
     author_email="javier.paris.u@gmail.com",
     url="https://github.com/jparisu/sIArena",
