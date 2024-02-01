@@ -1,5 +1,5 @@
 
-.. include:: src/titlepage.rst
+.. include:: /rst/titlepage.rst
 
 
 .. toctree::
