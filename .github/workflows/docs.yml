@@ -9,7 +9,8 @@ on:
       - main
 
 jobs:
-  build:
+
+  test-docs:
     runs-on: ubuntu-latest
 
     steps:
