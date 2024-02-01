@@ -1,10 +1,5 @@
 
-.. toctree::
-   :caption: Introduction
-   :maxdepth: 2
-   :hidden:
-
-   /rst/titlepage
+.. include:: src/titlepage.rst
 
 
 .. toctree::
