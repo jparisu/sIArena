@@ -8,7 +8,9 @@ def plot_terrain_2D(
             terrain: Terrain,
             paths: List[Path] = [],
             colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b'],
-            cmap: str = 'terrain'):
+            cmap: str = 'terrain',
+            title: str = 'Terrain',
+        ):
     """Plots the terrain and the given paths"""
 
     plt.clf()
@@ -27,6 +29,7 @@ def plot_terrain_2D(
 
     plt.xlabel('row')
     plt.ylabel('col')
+    plt.title(title)
 
     plt.colorbar()
     plt.show(block=False)

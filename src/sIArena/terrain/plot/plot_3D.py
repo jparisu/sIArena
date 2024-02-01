@@ -11,7 +11,9 @@ def plot_terrain_3D(
             angles: List[tuple] = [(45, 45), (45, 225)],
             paths: List[Path] = [],
             colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b'],
-            cmap: str = 'terrain'):
+            cmap: str = 'terrain',
+            title: str = 'Terrain',
+        ):
     """Plots the terrain and the given paths"""
 
     fig = plt.figure(figsize=(18, 6))
@@ -56,4 +58,5 @@ def plot_terrain_3D(
         ax.set_xlabel('row')
         ax.set_ylabel('col')
 
+    fig.title(title)
     plt.show()
