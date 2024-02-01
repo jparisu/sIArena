@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -23,5 +25,5 @@ jobs:
     - name: Install package from current branch
       run: pip install --upgrade git+https://github.com/jparisu/sIArena.git@${GITHUB_REF#refs/heads/}
 
-    - name: Run testu
+    - name: Run tests
       run: pytest
