@@ -1,0 +1,29 @@
+name: Test Python Package Installation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install package from GitHub
+      run: pip install --upgrade git+https://github.com/jparisu/sIArena.git
+
+    # TODO: add tests
+    # - name: Run tests
+    #   run: |
+    #     # Commands to run your tests
