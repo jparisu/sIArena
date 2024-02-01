@@ -1,5 +1,11 @@
 
-.. include:: /rst/titlepage.rst
+.. toctree::
+   :caption: Introduction
+   :maxdepth: 2
+   :hidden:
+
+   /rst/titlepage
+
 
 .. toctree::
    :caption: Getting Started
@@ -10,6 +16,7 @@
    /rst/getting_started/tutorial
    /rst/getting_started/tldr
 
+
 .. toctree::
    :caption: Elements
    :maxdepth: 2
@@ -18,6 +25,7 @@
    /rst/elements/terrain
    /rst/elements/measure
    /rst/elements/generation
+
 
 .. toctree::
    :caption: Appendixes

@@ -10,7 +10,7 @@ Installation
 Google Colab
 ============
 
-Using :ref:`Google Colab <https://colab.google>` is the easiest way to get started.
+Using `Google Colab <https://colab.google>`_ is the easiest way to get started.
 Just add in the first cell of your notebook:
 
 .. code-block:: python
