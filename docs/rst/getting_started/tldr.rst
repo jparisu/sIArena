@@ -1,4 +1,4 @@
-.. _tldr:
+.. _getting_started__tldr:
 
 #####
 TL;DR

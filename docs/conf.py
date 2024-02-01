@@ -11,4 +11,7 @@ html_theme = 'sphinx_rtd_theme'
 source_suffix = ['.rst', '.md']
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = 'rst/index'
+
+# The spelling list filename.
+spelling_word_list_filename=['spelling/spelling_wordlist.txt']

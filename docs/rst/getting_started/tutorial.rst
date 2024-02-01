@@ -1,4 +1,4 @@
-.. _tutorial:
+.. _getting_started__tutorial:
 
 ########
 Tutorial
