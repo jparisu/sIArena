@@ -23,7 +23,5 @@ jobs:
     - name: Install package from current branch
       run: pip install --upgrade git+https://github.com/jparisu/sIArena.git@${GITHUB_REF#refs/heads/}
 
-    # TODO: add tests
-    # - name: Run tests
-    #   run: |
-    #     # Commands to run your tests
+    - name: Run testu
+      run: pytest
