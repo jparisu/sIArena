@@ -1,4 +1,4 @@
-.. _tldr:
+.. _getting_started_tldr:
 
 #####
 TL;DR
@@ -12,9 +12,9 @@ This project helps you to generate 2D terrains, that are matrix of integers, wit
 Over these terrains you have several features:
 
 - You can print it in the console
-- You can plot it in a matplotlib 2D plot
+- You can plot it in a ``matplotlib`` 2D plot
 - You can plot it in 3D with different angles
-- **You can check the total path of a given path**
+- **You can check the total length of a given path from origin to destination**
 - You can even draw the paths in the plots previously mentioned
 
 
@@ -28,7 +28,7 @@ Just use the following command in your notebook:
 
     !pip install git+https://github.com/jparisu/sIArena.git
 
-Check the :ref:`installation guide <installation>` for more details.
+Check the :ref:`installation guide <getting_started_installation>` for more details.
 
 
 =========================

@@ -1,4 +1,4 @@
-.. _installation:
+.. _getting_started_installation:
 
 ############
 Installation
@@ -10,7 +10,7 @@ Installation
 Google Colab
 ============
 
-Using :ref:`Google Colab <https://colab.google>` is the easiest way to get started.
+Using `Google Colab <https://colab.google>`_ is the easiest way to get started.
 Just add in the first cell of your notebook:
 
 .. code-block:: python
@@ -31,7 +31,7 @@ Install in Windows Anaconda
 In order to install the package in Windows Anaconda, the steps are the same as for :ref:`installation_googlecolab`.
 The only detail is that ``git`` may not be installed by default in Anaconda.
 
-From a command prompt, you can install it in a conda environment inside Anaconda:
+From a command prompt, you can install it in a ``conda`` environment inside Anaconda:
 
 .. code-block:: bash
 

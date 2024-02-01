@@ -32,4 +32,7 @@ This library is mainly written in *Python*.
 Further reading
 ===============
 
-To start using the library, please check the :ref:`getting_started` section.
+To start using the library, please check the following links:
+
+- :ref:`getting_started_installation`
+- :ref:`getting_started_tutorial`
