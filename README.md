@@ -6,6 +6,8 @@ Educational motive repository form searching algorithms.
 
 **Framework** for testing **AI** searching algorithms over maps and terrains.
 
+![sIArena](docs/resources/images/3dplot_big_solved.png)
+
 
 ## Documentation
 

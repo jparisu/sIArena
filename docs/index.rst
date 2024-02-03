@@ -17,11 +17,11 @@ sIArena Documentation
 
 
 .. toctree::
-   :caption: Elements
+   :caption: Modules
    :maxdepth: 2
    :hidden:
 
-   /rst/elements/terrain
+   /rst/elements/elements
    /rst/elements/measure
    /rst/elements/generation
 

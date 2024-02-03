@@ -1,10 +1,25 @@
 from typing import List, Tuple
 import numpy as np
+import math
 
 # Object representing a coordinate in the terrain (row, column)
 Coordinate = Tuple[int,int]
 # Object representing a path in the terrain (list of coordinates)
 Path = List[Coordinate]
+
+
+def default_cost_function(origin_height: int, target_height: int) -> int:
+    """Default cost function"""
+    if origin_height == target_height:
+        # step in same level has cost 1
+        return 1
+    elif origin_height > target_height:
+        # step down has same cost as the difference in height
+        return origin_height - target_height
+    else:
+        # step up has double cost as the difference in height
+        return (target_height - origin_height) * 2
+
 
 
 class Terrain:
@@ -25,7 +40,8 @@ class Terrain:
                 self,
                 matrix: List[List[int]],
                 origin: Coordinate = None,
-                destination: Coordinate = None
+                destination: Coordinate = None,
+                cost_function: callable = default_cost_function,
             ):
         """
         Construct a terrain from a matrix of integers
@@ -37,6 +53,7 @@ class Terrain:
         self.matrix = matrix
         self.n = len(matrix)
         self.m = len(matrix[0])
+        self.cost_function = cost_function
 
         self.origin = origin
         self.destination = destination
@@ -78,7 +95,7 @@ class Terrain:
         for i, row in enumerate(self.matrix):
             for j, cell in enumerate(row):
                 if (i,j) == self.origin:
-                    s += "|*"
+                    s += "|+"
                 elif (i,j) == self.destination:
                     s += "|x"
                 else:
@@ -125,12 +142,7 @@ class Terrain:
 
     def get_cost(self, pos1: Coordinate, pos2: Coordinate) -> int:
         """Returns the cost of going from pos1 to pos2"""
-        if self[pos1] == self[pos2]:
-            return 1
-        elif self[pos1] > self[pos2]:
-            return self[pos1] - self[pos2]
-        else:
-            return 2 * (self[pos2] - self[pos1])
+        return self.cost_function(self[pos1], self[pos2])
 
 
     def get_path_cost(self, path: Path) -> int:

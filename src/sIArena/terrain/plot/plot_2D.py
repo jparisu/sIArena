@@ -39,8 +39,8 @@ def plot_terrain_2D(
             colors[i % len(colors)],
             label=paths_legends_[i],)
 
-    plt.xlabel('row')
-    plt.ylabel('col')
+    plt.xlabel('col')
+    plt.ylabel('row')
     plt.title(title)
 
     if paths_legends or use_cost_as_path_legend:
