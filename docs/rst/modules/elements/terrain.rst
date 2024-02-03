@@ -26,7 +26,7 @@ Attributes
 
 - ``n``: number of rows
 - ``m``: number of columns
-- ``matrix``: numpy matrix of size ``NxM``
+- ``matrix``: ``numpy`` matrix of size ``NxM``
 - ``origin``: ``tuple(int,int)`` with the coordinates of the origin cell
 - ``destination``: ``tuple(int,int)`` with the coordinates of the destination cell
 - ``cost_function``: function that receives 2 integers ``x,y`` and returns the cost of moving from one cell with value ``x`` to another with value ``y``
@@ -41,12 +41,16 @@ Built-in Methods
   *i.e.* ``terrain[(0,0)]``.
 
 - ``ctor``: constructor that receives a matrix.
-  - ``matrix``: numpy matrix of size ``NxM``
-  - ``origin``: ``Coordinate`` with the coordinates of the origin cell
+
+  - ``matrix``: ``numpy`` matrix of size ``NxM``
+
+  - ``origin``: ``Coordinate`` with the coordinates of the origin cell.
     If ``None`` is provided, the origin will be set to ``(0,0)``
-  - ``destination``: ``Coordinate`` with the coordinates of the destination cell
+
+  - ``destination``: ``Coordinate`` with the coordinates of the destination cell.
     If ``None`` is provided, the destination will be set to ``(n-1,m-1)``
-  - ``cost_function``: function that receives 2 integers ``x,y`` and returns the cost of moving from one cell with value ``x`` to another with value ``y``
+
+  - ``cost_function``: function that receives 2 integers ``x,y`` and returns the cost of moving from one cell with value ``x`` to another with value ``y``.
     In case is not provided, the :ref:`elements_terrain_default_cost_function` will be used.
 
 
@@ -133,7 +137,7 @@ The origin and destination cells are marked with the characters ``+`` and ``x`` 
 2D plot
 *******
 
-.. image:: resources/image/2dplot_55.png
+.. image:: /resources/image/2dplot_5_5.png
 
 In order to learn how to visualize a 2D plot of the terrain, please refer to the :ref:`plotting_2d` section.
 
@@ -141,6 +145,6 @@ In order to learn how to visualize a 2D plot of the terrain, please refer to the
 3D plot
 *******
 
-.. image:: resources/image/3dplot_55.png
+.. image:: /resources/image/3dplot_5_5.png
 
 In order to learn how to visualize a 3D plot of the terrain, please refer to the :ref:`plotting_3d` section.

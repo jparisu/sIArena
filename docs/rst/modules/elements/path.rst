@@ -9,7 +9,7 @@ Path
 
     from sIArena.terrain.Terrain import Path
 
-A :term:`Path` is a sequence of :ref:`elements_coordinates` that represents a route from one point to another in a :ref:`elements_terrain`.
+A :term:`Path` is a sequence of :ref:`elements_coordinate` that represents a route from one point to another in a :ref:`elements_terrain`.
 
 In order to be **valid**, each step of the path (each pair of consecutive coordinates)
 must be a movement of one step in one of the four cardinal directions (up, down, left, right).

@@ -8,3 +8,8 @@ Measure tools
 
     Coming soon.
     TODO
+
+.. contents::
+    :local:
+    :backlinks: none
+    :depth: 2

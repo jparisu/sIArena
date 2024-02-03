@@ -5,6 +5,11 @@
 Plot Terrain
 ############
 
+.. contents::
+    :local:
+    :backlinks: none
+    :depth: 2
+
 Certain functions allow to plot a :ref:`elements_terrain` to visualize the heights easily.
 
 
@@ -29,7 +34,7 @@ Parameters
 - ``paths_legends: List[str] = None``: The legend message for each path
 - ``add_cost_to_legend: bool = False``: If True, the cost of the path will be added as legend
 - ``colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b']``: The colors to use for each paths
-- ``cmap: str = 'terrain'``: The colormap to use for the terrain
+- ``cmap: str = 'terrain'``: The ``colormap`` to use for the terrain
 - ``title: str = 'Terrain'``: The title of the plot
 
 Example
@@ -52,7 +57,7 @@ Example
         paths_legends=['Path 1'],
         add_cost_to_legend=True)
 
-.. image:: resources/images/2dplot_3_4_path.png
+.. image:: /resources/images/2dplot_3_4_path.png
 
 
 .. _plotting_3d:
@@ -76,7 +81,7 @@ Parameters
 - ``angles: List[tuple] = [(45, 45), (45, 225)]``: The angles from where to plot the terrain
 - ``paths: List[Path] = []``: The paths to plot
 - ``colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b']``: The colors to use for each paths
-- ``cmap: str = 'terrain'``: The colormap to use for the terrain
+- ``cmap: str = 'terrain'``: The ``colormap`` to use for the terrain
 - ``title: str = 'Terrain'``: The title of the plot
 
 Example
@@ -98,7 +103,7 @@ Example
         angles=[(80, 10), (30, 190), (30, 10)],
         paths=[path])
 
-.. image:: resources/images/3dplot_3_4_path.png
+.. image:: /resources/images/3dplot_3_4_path.png
 
 
 
@@ -107,9 +112,9 @@ Examples
 
 When used in bigger terrains, the result is much more interesting.
 
-.. image:: resources/images/2dplot_10_10_solved.png
+.. image:: /resources/images/2dplot_10_10_solved.png
 
-.. image:: resources/images/3dplot_10_10_solved.png
+.. image:: /resources/images/3dplot_10_10_solved.png
 
 
 .. warning::

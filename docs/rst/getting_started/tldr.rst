@@ -4,18 +4,21 @@
 TL;DR
 #####
 
+Too hard to read? Here is a quick summary of the project.
+
+.. contents::
+    :local:
+    :backlinks: none
+    :depth: 2
+
 ================
 Project Overview
 ================
 
 This project helps you to generate 2D terrains, that are matrix of integers, with a point of origin and a point of destination.
-Over these terrains you have several features:
+The main goal is to develop an algorithm that is able to find the best path from the origin to the destination.
 
-- You can print it in the console
-- You can plot it in a ``matplotlib`` 2D plot
-- You can plot it in 3D with different angles
-- **You can check the total length of a given path from origin to destination**
-- You can even draw the paths in the plots previously mentioned
+Check :ref:`elements` for more details.
 
 
 ============
@@ -35,23 +38,7 @@ Check the :ref:`installation guide <getting_started_installation>` for more deta
 How to generate a terrain
 =========================
 
-In order to generate a pseudorandom :ref:`elements_terrain`,
-the abstract class ``TerrainGenerator`` is provided.
-The main function use the following parameters:
-
-- ``n: int`` number of rows
-- ``m: int`` number of columns
-- ``min_height: int = 0`` minimum height of the terrain
-- ``max_height: int = 99`` maximum height of the terrain
-- ``min_step: int = 1`` minimum step between two heights
-- ``abruptness: float = 0.2`` 0: smooth, 1: abrupt
-- ``seed: int = None`` seed for the random number generator
-- ``origin: Coordinate = None`` origin of the terrain
-- ``destination: Coordinate = None`` destination of the terrain
-
-There are 2 main generators: ``FocusedTerrainGenerator`` and ``PernilTerrainGenerator``.
-
-Create your terrain as follows:
+Use the following code changing some parameters:
 
 .. code-block:: py
 
@@ -59,35 +46,25 @@ Create your terrain as follows:
     from sIArena.terrain.generator.FocusedGenerator import FocusedGenerator
     from sIArena.terrain.generator.PernilGenerator import PernilGenerator
 
-    N = 20
-    M = 20
-    MIN_HEIGHT = 0
-    MAX_HEIGHT = 10
-    MIN_STEP = 1
-    ABR = 0.1
-    ORIGIN = None
-    DESTINATION = None
-    SEED = 60
-    GENERATOR = PernilGenerator()
+    terrain = PernilGenerator().generate_random_terrain(
+        n=20,
+        m=20,
+        min_height=0,
+        max_height=10,
+        min_step=1,
+        abruptness=0.1,
+        seed=0,
+        origin=(0,0),
+        destination=(19,19))
 
-    terrain = TerrainGenerator.generate_random_terrain(
-        GENERATOR,
-        n=N,
-        m=M,
-        min_height=MIN_HEIGHT,
-        max_height=MAX_HEIGHT,
-        min_step=MIN_STEP,
-        abruptness=ABR,
-        seed=SEED,
-        origin=ORIGIN,
-        destination=DESTINATION)
+Check :ref:`generation` for more details.
 
 
 =====================================
 How to write a path finding algorithm
 =====================================
 
-Easy, create an algorithm that is able to retrieve a list of sequently :ref:`elements_coordinates`
+Easy, create an algorithm that is able to retrieve a list of sequently :ref:`elements_coordinate`
 that goes from the origin to the destination of the terrain.
 
 
@@ -111,3 +88,5 @@ that goes from the origin to the destination of the terrain.
 
     # measure your algorithm cost and time
     min_cost, second, path = measure_function(my_algorithm, terrain)
+
+Check :ref:`measure` for more details.
