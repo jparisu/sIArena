@@ -37,19 +37,34 @@ Built-in Methods
 - ``str``: returns a string representation of the matrix of the terrain.
   The origin and destination cells are marked with the characters ``+`` and ``x`` respectively.
 
-- ``len``: returns the number of cells in the terrain.
-  Returns a tuple with ``(n,m)``.
-
-- ``getitem []``: returns the value of the cell at the given coordinates.
+- ``getitem [Coordinate]``: returns the value of the cell at the given coordinates.
+  *i.e.* ``terrain[(0,0)]``.
 
 - ``ctor``: constructor that receives a matrix.
   - ``matrix``: numpy matrix of size ``NxM``
-  - ``origin``: ``tuple(int,int)`` with the coordinates of the origin cell
+  - ``origin``: ``Coordinate`` with the coordinates of the origin cell
     If ``None`` is provided, the origin will be set to ``(0,0)``
-  - ``destination``: ``tuple(int,int)`` with the coordinates of the destination cell
+  - ``destination``: ``Coordinate`` with the coordinates of the destination cell
     If ``None`` is provided, the destination will be set to ``(n-1,m-1)``
   - ``cost_function``: function that receives 2 integers ``x,y`` and returns the cost of moving from one cell with value ``x`` to another with value ``y``
     In case is not provided, the :ref:`elements_terrain_default_cost_function` will be used.
+
+
+Methods
+-------
+
+- ``size``: returns a tuple with ``(n,m)``.
+- ``get_neighbors``: returns a list of the coordinates of the cells that are adjacent to the given cell.
+  - ``pos``: ``Coordinate``
+- ``get_cost``: returns the cost of moving from one cell to another.
+  - ``pos1``: ``Coordinate``
+  - ``pos2``: ``Coordinate``
+- ``get_path_cost``: returns the cost of a whole Path.
+  - ``path``: ``Path``
+- ``is_complete_path``: returns ``True`` if the given Path is valid and complete.
+  - ``path``: ``Path``
+
+*Some of this methods use the element* :ref:`elements_path` *that is seeing afterwards.*
 
 
 .. _elements_terrain_cost_function:

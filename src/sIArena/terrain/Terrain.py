@@ -85,22 +85,26 @@ class Terrain:
             if len(row) == self.m:
                 AttributeError("Matrix is not rectangular")
 
+        # Check that the matrix is numpy or else convert it
+        if not isinstance(self.matrix, np.ndarray):
+            self.matrix = np.matrix(self.matrix, dtype=int)
+
 
     def __str__(self):
         """Returns a string representation of the terrain"""
         # Calculate the maximum length of a cell
-        max_length = len(str(max([max(row) for row in self.matrix])))
+        max_length = len(str(self.matrix.max()))
         # Create the string representation
         s = "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
-        for i, row in enumerate(self.matrix):
-            for j, cell in enumerate(row):
+        for i in range(self.n):
+            for j in range(self.m):
                 if (i,j) == self.origin:
                     s += "|+"
                 elif (i,j) == self.destination:
                     s += "|x"
                 else:
                     s += "| "
-                s += str(cell).rjust(max_length) + " "
+                s += str(self[(i,j)]).rjust(max_length) + " "
             s += "|\n"
             s += "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
         return s
@@ -118,7 +122,7 @@ class Terrain:
 
     def __getitem__(self, key: Coordinate) -> int:
         """Returns the value of the cell at the given position"""
-        return self.matrix[key[0]][key[1]]
+        return self.matrix[key[0],key[1]]
 
 
     def __repr__(self) -> str:
@@ -154,7 +158,7 @@ class Terrain:
         return cost
 
 
-    def is_full_path(self, path: Path) -> bool:
+    def is_complete_path(self, path: Path) -> bool:
         """Returns True if the given path goes from the top left corner to the bottom right corner"""
         return self.is_valid_path(path) and path[0] == self.origin and path[-1] == self.destination
 

@@ -1,4 +1,4 @@
-.. _elements_generation:
+.. _generation:
 
 ################
 Generate Terrain

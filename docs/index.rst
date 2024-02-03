@@ -21,9 +21,10 @@ sIArena Documentation
    :maxdepth: 2
    :hidden:
 
-   /rst/elements/elements
-   /rst/elements/measure
-   /rst/elements/generation
+   /rst/modules/elements
+   /rst/modules/measure
+   /rst/modules/generation
+   /rst/modules/plotting
 
 
 .. toctree::

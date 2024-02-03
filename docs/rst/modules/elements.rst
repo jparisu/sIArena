@@ -11,13 +11,10 @@ a :ref:`elements_terrain` and a :ref:`elements_path`.
 
 
 
-..include:: rst/elements/coordinate.rst
+.. include:: rst/modules/elements/coordinate.rst
 
-..include:: rst/elements/terrain.rst
+.. include:: rst/modules/elements/terrain.rst
 
-..include:: rst/elements/path.rst
+.. include:: rst/modules/elements/path.rst
 
-
-=======
-Example
-=======
+.. include:: rst/modules/elements/example.rst
