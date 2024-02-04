@@ -1,10 +1,25 @@
 from typing import List, Tuple
 import numpy as np
+import math
 
 # Object representing a coordinate in the terrain (row, column)
 Coordinate = Tuple[int,int]
 # Object representing a path in the terrain (list of coordinates)
 Path = List[Coordinate]
+
+
+def default_cost_function(origin_height: int, target_height: int) -> int:
+    """Default cost function"""
+    if origin_height == target_height:
+        # step in same level has cost 1
+        return 1
+    elif origin_height > target_height:
+        # step down has same cost as the difference in height
+        return origin_height - target_height
+    else:
+        # step up has double cost as the difference in height
+        return (target_height - origin_height) * 2
+
 
 
 class Terrain:
@@ -25,7 +40,8 @@ class Terrain:
                 self,
                 matrix: List[List[int]],
                 origin: Coordinate = None,
-                destination: Coordinate = None
+                destination: Coordinate = None,
+                cost_function: callable = default_cost_function,
             ):
         """
         Construct a terrain from a matrix of integers
@@ -37,6 +53,7 @@ class Terrain:
         self.matrix = matrix
         self.n = len(matrix)
         self.m = len(matrix[0])
+        self.cost_function = cost_function
 
         self.origin = origin
         self.destination = destination
@@ -68,22 +85,26 @@ class Terrain:
             if len(row) == self.m:
                 AttributeError("Matrix is not rectangular")
 
+        # Check that the matrix is numpy or else convert it
+        if not isinstance(self.matrix, np.ndarray):
+            self.matrix = np.matrix(self.matrix, dtype=int)
+
 
     def __str__(self):
         """Returns a string representation of the terrain"""
         # Calculate the maximum length of a cell
-        max_length = len(str(max([max(row) for row in self.matrix])))
+        max_length = len(str(self.matrix.max()))
         # Create the string representation
         s = "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
-        for i, row in enumerate(self.matrix):
-            for j, cell in enumerate(row):
+        for i in range(self.n):
+            for j in range(self.m):
                 if (i,j) == self.origin:
-                    s += "|*"
+                    s += "|+"
                 elif (i,j) == self.destination:
                     s += "|x"
                 else:
                     s += "| "
-                s += str(cell).rjust(max_length) + " "
+                s += str(self[(i,j)]).rjust(max_length) + " "
             s += "|\n"
             s += "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
         return s
@@ -101,7 +122,7 @@ class Terrain:
 
     def __getitem__(self, key: Coordinate) -> int:
         """Returns the value of the cell at the given position"""
-        return self.matrix[key[0]][key[1]]
+        return self.matrix[key[0],key[1]]
 
 
     def __repr__(self) -> str:
@@ -125,12 +146,7 @@ class Terrain:
 
     def get_cost(self, pos1: Coordinate, pos2: Coordinate) -> int:
         """Returns the cost of going from pos1 to pos2"""
-        if self[pos1] == self[pos2]:
-            return 1
-        elif self[pos1] > self[pos2]:
-            return self[pos1] - self[pos2]
-        else:
-            return 2 * (self[pos2] - self[pos1])
+        return self.cost_function(self[pos1], self[pos2])
 
 
     def get_path_cost(self, path: Path) -> int:
@@ -142,7 +158,7 @@ class Terrain:
         return cost
 
 
-    def is_full_path(self, path: Path) -> bool:
+    def is_complete_path(self, path: Path) -> bool:
         """Returns True if the given path goes from the top left corner to the bottom right corner"""
         return self.is_valid_path(path) and path[0] == self.origin and path[-1] == self.destination
 

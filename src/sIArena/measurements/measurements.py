@@ -59,9 +59,12 @@ def measure_function(
         if thread.is_alive():
             raise TimeoutError(f"Function {search_function.__name__} took more than {max_seconds} seconds to finish.")
         else:
-            path = result[0]
+            if len(result) == 0:
+                raise ValueError(f"Function {search_function.__name__} finished with an error.")
+            else:
+                path = result[0]
 
-        if not terrain.is_full_path(path):
+        if not terrain.is_complete_path(path):
             raise ValueError(f"Found Incorrect path with function {search_function.__name__}: {path}")
 
         cost = terrain.get_path_cost(path)

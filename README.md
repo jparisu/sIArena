@@ -2,9 +2,9 @@
 
 [![Documentation Status](https://readthedocs.org/projects/siarena/badge/?version=latest)](https://siarena.readthedocs.io/en/latest/?badge=latest)
 
-Educational motive repository form searching algorithms.
+Educational **Framework** for testing **AI** path finding algorithms over maps and terrains.
 
-**Framework** for testing **AI** searching algorithms over maps and terrains.
+![sIArena](docs/resources/images/3dplot_big_solved.png)
 
 
 ## Documentation
