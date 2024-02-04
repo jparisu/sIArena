@@ -137,7 +137,7 @@ The origin and destination cells are marked with the characters ``+`` and ``x`` 
 2D plot
 *******
 
-.. image:: /resources/image/2dplot_5_5.png
+.. image:: /resources/images/2dplot_5_5.png
 
 In order to learn how to visualize a 2D plot of the terrain, please refer to the :ref:`plotting_2d` section.
 
@@ -145,6 +145,6 @@ In order to learn how to visualize a 2D plot of the terrain, please refer to the
 3D plot
 *******
 
-.. image:: /resources/image/3dplot_5_5.png
+.. image:: /resources/images/3dplot_5_5.png
 
 In order to learn how to visualize a 3D plot of the terrain, please refer to the :ref:`plotting_3d` section.
