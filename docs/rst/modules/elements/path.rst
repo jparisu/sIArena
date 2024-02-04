@@ -13,7 +13,14 @@ A :term:`Path` is a sequence of :ref:`elements_coordinate` that represents a rou
 
 In order to be **valid**, each step of the path (each pair of consecutive coordinates)
 must be a movement of one step in one of the four cardinal directions (up, down, left, right).
-Mathematically: ``for any i : if ( abs(path[i].x - path[i+1].x)) == 1 ) then ( path[i].y == path[i+1].y ) else ( abs(path[i].y - path[i+1].y)) == 1 ) and ( path[i].x == path[i+1].x )``
+Mathematically:
+
+.. code-block:: python
+
+    def are_consecutive(coor1: Coordinate, coor2: Coordinate) -> bool:
+        return
+            ( abs(coor1.x - coor2.x) == 1 and abs(coor1.y - coor2.y) == 0 ) or
+            ( abs(coor1.x - coor2.x) == 0 and abs(coor1.y - coor2.y) == 1 )
 
 In order to be **complete**, the path must be valid and:
 

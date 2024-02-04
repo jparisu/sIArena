@@ -10,7 +10,7 @@ It is developed with educational and research purposes related with **computer s
 Overview
 ========
 
-**sIArena** or **IArena Searching** is a *Python* library that provides a framework for developing and testing searching algorithms.
+**sIArena** or **IArena Searching** is a *Python* library that provides a framework for developing and testing path finding algorithms.
 The main idea is to be able to test robustness and efficiency of algorithms and heuristics in different terrains.
 
 .. image:: /resources/images/3dplot_big_solved.png

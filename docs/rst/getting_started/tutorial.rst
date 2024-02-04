@@ -50,6 +50,8 @@ The following snippet generates the terrain displayed below.
     :language: python
     :lines: 4-19
 
+We can see printed the terrain matrix.
+The origin cell is represented by a ``+``, and the destination cell by a ``x``.
 
 .. _tutorial_plotting:
 
@@ -66,9 +68,9 @@ The following snippet plots the terrain generated in the previous section:
     :lines: 24-28
 
 
-.. image:: /resources/images/2dplot_10_10.png
+.. image:: /resources/images/2dplot_big.png
 
-.. image:: /resources/images/3dplot_10_10.png
+.. image:: /resources/images/3dplot_big.png
 
 
 .. _tutorial_path_finding:
@@ -79,9 +81,6 @@ Path finding algorithm
 The main goal of the library is to allow to create and test different path finding algorithms.
 These algorithms are expected to find the lowest cost possible path from the origin to the destination of a terrain.
 To generate such kind of algorithms, just create a function which only parameter is a terrain, and that returns a path.
-
-Complete path
--------------
 
 A path is a list of sequently :ref:`Coordinates <elements_coordinate>` from the origin to the destination of a specific terrain.
 In order for a path to be valid, each coordinate must be adjacent to the next one,
@@ -139,10 +138,16 @@ The following snippet shows how to measure the performance of the algorithm impl
     :language: python
     :lines: 93-101
 
+The previous algorithm finds in fractions of milliseconds a path with cost ``559``.
+
+Conclusion
+==========
+
+Creating a terrain, and the testing a path finding algorithm is a simple and easy task using **sIArena**.
 Knowing the time needed to find a path, and the cost of it,
 different algorithms could be compared to determine which one is the best for a specific terrain.
 
 For instance, in the map generated before,
-the lowest cost path should look like the following:
+the lowest cost path should look like the following, with cost ``121``:
 
 .. image:: /resources/images/3dplot_big_solved.png
