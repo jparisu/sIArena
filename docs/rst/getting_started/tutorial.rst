@@ -46,24 +46,9 @@ The library provides a set of :ref:`tools <generation>` to generate pseudo-rando
 
 The following snippet generates the terrain displayed below.
 
-.. code-block:: python
-
-    from sIArena.terrain.Terrain import Coordinate, Terrain, Path
-    from sIArena.terrain.generator.PernilGenerator import PernilGenerator
-
-    terrain = PernilGenerator().generate_random_terrain(
-        n=25,
-        m=25,
-        min_height=0,
-        max_height=100,
-        min_step=25,
-        abruptness=0.1,
-        seed=60,
-        origin=None,
-        destination=None)
-
-    # To print the terrain in ascii format
-    print(terrain)
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 4-19
 
 .. code-block:: text
 
@@ -119,9 +104,6 @@ The following snippet generates the terrain displayed below.
     |  50 |  50 |  50 |  25 |  25 |   0 |   0 |   0 |   0 |  25 |  50 |  50 |  50 |  50 |  75 |  75 | 100 | 100 |  75 |  75 |  50 |  50 |  50 |  50 |x 50 |
     +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
 
-
-.. image:: /resources/images/2dplot_10_10.png
-
 For further information about the terrain generation, check the :ref:`generation section <generation>`.
 
 
@@ -135,38 +117,14 @@ These tools allow to display the terrain as a height map in 2D or 3D.
 
 The following snippet plots the terrain generated in the previous section:
 
-.. code-block:: python
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 24-28
 
-    from sIArena.terrain.plot.plot_2D import plot_terrain_2D
-    from sIArena.terrain.plot.plot_3D import plot_terrain_3D
-
-    plot_terrain_2D(terrain)
-    plot_terrain_3D(terrain, angles=[(80, 10), (30, 190), (30, 10)])
 
 .. image:: /resources/images/2dplot_10_10.png
 
 .. image:: /resources/images/3dplot_10_10.png
-
-
-The library also support to show a path in the terrain, as shown in the following snippet:
-
-.. code-block:: python
-
-    from sIArena.terrain.plot.plot_2D import plot_terrain_2D
-    from sIArena.terrain.plot.plot_3D import plot_terrain_3D
-
-    # Create a path (it is not valid neither complete)
-    path = [terrain.origin, terrain.destination]
-
-    plot_terrain_2D(terrain, paths=[path])
-    plot_terrain_3D(terrain, paths=[path], angles=[(80, 10), (30, 190), (30, 10)])
-
-
-.. image:: /resources/images/2dplot_10_10_solved.png
-
-.. image:: /resources/images/3dplot_10_10_solved.png
-
-For further information about the terrain plotting, check the :ref:`plotting section <visualization>`.
 
 
 .. _getting_started_path_finding:
@@ -185,53 +143,44 @@ A path is a list of sequently :ref:`Coordinates <elements_coordinate>` from the 
 In order for a path to be valid, each coordinate must be adjacent to the next one,
 this means, to be at a distance of 1 in the x or y axis, but not in both at the same time.
 
-Be aware that not all the terrains start and end in the corners, but their origin and destination may vary.
+The following snippet shows different methods from terrain that could be useful to build the path finding algorithm:
+
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 33-44
+
+
 In order for a path to be complete, the first coordinate must be the origin and the last one the destination.
+The following snippet shows different a path finding algorithm that goes down to the end of the map, and then right.
+Be aware that not all the terrains start and end in the corners, but their origin and destination may vary.
 
-The following snippet shows different terrain methods that helps to create a path:
-
-.. code-block:: python
-
-    import random # import and seed random module
-    random.seed(0)
-
-    from sIArena.terrain.Terrain import Coordinate, Terrain, Path
-
-    def find_path(terrain: Terrain) -> Path:
-        # Get the terrain size
-        n, m = terrain.size()
-
-        # Get origin and destination coordinates
-        origin = terrain.origin
-        destination = terrain.destination
-
-        # Create a path that starts in origin
-        path = [origin]
-
-        # Check the possible neighbors of the origin (thus, the possible next step of the path)
-        neigs = terrain.get_neighbors(path[-1])
-
-        # Check the cost from the origin to each neighbor
-        costs = [terrain.get_cost(path[-1], neig) for neig in neigs]
-
-        # Using these functions, we can create a random path that starts in the origin and ends in the destination
-        while path[-1] != destination:
-            next_step = random.choice(terrain.get_neighbors(path[-1]))
-            path.append(next_step)
-
-        # Return the path
-        return path
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 49-65
 
 
-    # Get the path solution
-    path = find_path(terrain)
+And in the following some methods to check the path and its cost:
 
-    # Check if a path is complete (it must be with our implementation)
-    terrain.is_complete_path(path)
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 70-79
 
-    # Calculate the cost of a path
-    terrain.get_path_cost(path)
 
+Plot the path
+=============
+
+The library also support to show a path in the terrain, as shown in the following snippet:
+
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 82-88
+
+
+.. image:: /resources/images/2dplot_10_10_solved_down.png
+
+.. image:: /resources/images/3dplot_10_10_solved_down.png
+
+For further information about the terrain plotting, check the :ref:`plotting section <visualization>`.
 
 
 
@@ -243,14 +192,9 @@ This is done by measuring the mean time and the minimum cost of the path found b
 
 The following snippet shows how to measure the performance of the algorithm implemented before:
 
-.. code-block:: python
+.. literalinclude:: /resources/scripts/tutorial.py
+    :language: python
+    :lines: 91-101
 
-    from sIArena.measurements.measurements import measure_function
-
-    min_cost, second, path = measure_function(
-        find_path,
-        terrain,
-        iterations=5,
-        debug=True)
-
-    print(f"Minimum cost: {min_cost} found in {second} seconds:\n{path}")
+Knowing the time needed to find a path, and the cost of it,
+different algorithms could be compared to determine which one is the best for a specific terrain.
