@@ -35,5 +35,5 @@ Further reading
 
 To start using the library, please check the following links:
 
-- :ref:`getting_started_installation`
-- :ref:`getting_started_tutorial`
+- :ref:`installation`
+- :ref:`tutorial`

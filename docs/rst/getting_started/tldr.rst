@@ -1,4 +1,4 @@
-.. _getting_started_tldr:
+.. _tldr:
 
 #####
 TL;DR
@@ -31,7 +31,7 @@ Just use the following command in your notebook:
 
     !pip install git+https://github.com/jparisu/sIArena.git
 
-Check the :ref:`installation guide <getting_started_installation>` for more details.
+Check the :ref:`installation guide <installation>` for more details.
 
 
 =========================

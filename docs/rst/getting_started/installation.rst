@@ -1,4 +1,4 @@
-.. _getting_started_installation:
+.. _installation:
 
 ############
 Installation

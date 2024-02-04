@@ -78,6 +78,7 @@ cost = terrain.get_path_cost(path)
 
 print(f"The path {path} with cost {cost} {'is' if is_complete else 'is not'} complete.")
 
+
 #####################################################################
 
 from sIArena.terrain.plot.plot_2D import plot_terrain_2D
