@@ -6,6 +6,7 @@ from sIArena.terrain.Terrain import Coordinate, Terrain, Path
 
 def plot_terrain_2D(
             terrain: Terrain,
+            path: Path = None,
             paths: List[Path] = [],
             paths_legends: List[str] = None,
             add_cost_to_legend: bool = False,
@@ -14,6 +15,9 @@ def plot_terrain_2D(
             title: str = 'Terrain',
         ):
     """Plots the terrain and the given paths"""
+
+    if path is not None:
+        paths = [path]
 
     plt.clf()
     plt.imshow(terrain.matrix, cmap=cmap)

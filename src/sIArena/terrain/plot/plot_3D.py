@@ -8,13 +8,17 @@ from sIArena.terrain.Terrain import Coordinate, Terrain, Path
 
 def plot_terrain_3D(
             terrain: Terrain,
-            angles: List[tuple] = [(45, 45), (45, 225)],
+            path: Path = None,
             paths: List[Path] = [],
+            angles: List[tuple] = [(45, 45), (45, 225)],
             colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b'],
             cmap: str = 'terrain',
             title: str = 'Terrain',
         ):
     """Plots the terrain and the given paths"""
+
+    if path is not None:
+        paths = [path]
 
     fig = plt.figure(figsize=(18, 6))
 

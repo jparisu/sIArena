@@ -30,7 +30,8 @@ Parameters
 ----------
 
 - ``terrain: Terrain``: The terrain to plot
-- ``paths: List[Path] = []``: The paths to plot
+- ``path: Path = None``: The path to plot
+- ``paths: List[Path] = []``: The paths to plot (if ``path`` is not used)
 - ``paths_legends: List[str] = None``: The legend message for each path
 - ``add_cost_to_legend: bool = False``: If True, the cost of the path will be added as legend
 - ``colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b']``: The colors to use for each paths
@@ -78,8 +79,9 @@ Parameters
 ----------
 
 - ``terrain: Terrain``: The terrain to plot
+- ``path: Path = None``: The path to plot
+- ``paths: List[Path] = []``: The paths to plot (if ``path`` is not used)
 - ``angles: List[tuple] = [(45, 45), (45, 225)]``: The angles from where to plot the terrain
-- ``paths: List[Path] = []``: The paths to plot
 - ``colors: List[str] = ['r', 'y', 'm', 'k', 'c', 'g', 'b']``: The colors to use for each paths
 - ``cmap: str = 'terrain'``: The ``colormap`` to use for the terrain
 - ``title: str = 'Terrain'``: The title of the plot
