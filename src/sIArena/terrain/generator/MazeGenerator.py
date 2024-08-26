@@ -32,7 +32,6 @@ class MazeGenerator(TerrainGenerator):
         maze = Maze(maze_n, maze_m)
 
         matrix = np.ones((n, m))
-        max_height = n*m
 
         for i in range(maze_n):
             for j in range(maze_m):
@@ -42,11 +41,24 @@ class MazeGenerator(TerrainGenerator):
                 down_left = (2*i+1, 2*j)    # 1 when no down wall
 
                 if 2*j+1 < m and not maze.tile((i, j)).right:
-                    matrix[up_right] = max_height
+                    matrix[up_right] = 1
                 if 2*i+1 < n and not maze.tile((i, j)).down:
-                    matrix[down_left] = max_height
+                    matrix[down_left] = 1
                 if 2*i+1 < n and 2*j+1 < m:
-                    matrix[down_right] = max_height
+                    matrix[down_right] = 1
+
+        # If n is odd, add a last space at the bottom
+        if n % 2 == 1:
+            matrix[n-1][-1] = 0
+
+        # If m is odd, add a last space at the right
+        if m % 2 == 1:
+            matrix[-1][m-1] = 0
+
+        # If both are odd, add a last space at the bottom right
+        if n % 2 == 1 and m % 2 == 1:
+            matrix[n-1][m-2] = 0
+
 
         return matrix
 
@@ -84,7 +96,7 @@ class Maze:
         self.m = m
         self.matrix = [[Tile() for _ in range(m)] for _ in range(n)]
 
-        current = (0, 0)
+        current = (n//2, m//2)
         self.matrix[current[0]][current[1]].visit()
         to_visit = self.surrounding_coordinates(current)
 
