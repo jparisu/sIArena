@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Set
 import numpy as np
 import math
 
@@ -21,26 +21,18 @@ def default_cost_function(origin_height: int, target_height: int) -> int:
         return (target_height - origin_height) * 2
 
 
-
-class Terrain:
+class NoPathTerrain:
     """
     This class represents a 2D terrain in a NxM int matrix where each value is the height.
 
     The problem to solve would be to find the lowest path to go from 0x0 (top left) to N-1xM-1 (bottom right).
     Each step in the path can only be to the right, down, left or up (no diagonals).
-    The cost for each step in the path is calculated as follows:
-
-    From cell with cost X to cell with cost Y:
-    - If X == Y: cost = 1           [keep in the same level]
-    - If X > Y: cost = X - Y        [climb down]
-    - If X < Y: cost = 2 * (Y - X)  [climb up]
+    The cost for each step in the path is calculated regarding the cost function
     """
 
     def __init__(
                 self,
                 matrix: List[List[int]],
-                origin: Coordinate = None,
-                destination: Coordinate = None,
                 cost_function: callable = default_cost_function,
             ):
         """
@@ -48,37 +40,12 @@ class Terrain:
 
         :param matrix: matrix of integers
         :param origin: origin of the path (if None top left corner)
-        :param destination: destination of the path (if None bottom right corner)
+        :param destinations: list of destinations in order(if None bottom right corner)
         """
         self.matrix = matrix
         self.n = len(matrix)
         self.m = len(matrix[0])
         self.cost_function = cost_function
-
-        self.origin = origin
-        self.destination = destination
-
-        if self.origin is None:
-            self.origin = (0, 0)
-        else:
-            self.origin = (origin[0], origin[1])
-
-        if self.destination is None:
-            self.destination = (self.n - 1, self.m - 1)
-        else:
-            self.destination = (destination[0], destination[1])
-
-        # Check that the origin is valid
-        if self.origin[0] < 0 and self.origin[0] >= self.n:
-            raise AttributeError(f"Origin row is out of bounds: {self.origin[0]}")
-        if self.origin[1] < 0 and self.origin[1] >= self.m:
-            raise AttributeError(f"Origin column is out of bounds: {self.origin[1]}")
-
-        # Check that the destination is valid
-        if self.destination[0] < 0 and self.destination[0] >= self.n:
-            raise AttributeError("Destination row is out of bounds")
-        if self.destination[1] < 0 and self.destination[1] >= self.m:
-            raise AttributeError("Destination column is out of bounds")
 
         # Check that the matrix is valid
         for row in matrix:
@@ -98,12 +65,7 @@ class Terrain:
         s = "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
         for i in range(self.n):
             for j in range(self.m):
-                if (i,j) == self.origin:
-                    s += "|+"
-                elif (i,j) == self.destination:
-                    s += "|x"
-                else:
-                    s += "| "
+                s += "| "
                 s += str(self[(i,j)]).rjust(max_length) + " "
             s += "|\n"
             s += "+" + ("-" * (max_length + 2) + "+") * self.m + "\n"
@@ -158,17 +120,158 @@ class Terrain:
         return cost
 
 
-    def is_complete_path(self, path: Path) -> bool:
-        """Returns True if the given path goes from the top left corner to the bottom right corner"""
-        return self.is_valid_path(path) and path[0] == self.origin and path[-1] == self.destination
+    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+        """True if valid path"""
+        return self.is_valid_path(path)
 
 
-    def is_valid_path(self, path: Path) -> bool:
+    def is_valid_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path is valid"""
         if path is None or len(path) == 0:
             return False
 
         for i in range(len(path) - 1):
             if path[i + 1] not in self.get_neighbors(path[i]):
-                return False
-        return True
+                return False, f"Invalid path: {path[i]} -> {path[i + 1]}"
+        return True, "Valid path"
+
+
+    def get_destination(self):
+        return None
+
+class Terrain (NoPathTerrain):
+    """
+    This class is a Terrain with an origin and a destination
+    """
+
+    def __init__(
+                self,
+                matrix: List[List[int]],
+                origin: Coordinate = None,
+                destination: Coordinate = None,
+                cost_function: callable = default_cost_function,
+            ):
+        """
+        Construct a terrain from a matrix of integers
+
+        :param matrix: matrix of integers
+        :param origin: origin of the path (if None top left corner)
+        :param destination: destination of the path (if None bottom right corner)
+        """
+        super().__init__(matrix, cost_function)
+        self.origin = origin
+        self.destination = destination
+
+        if self.origin is None:
+            self.origin = (0, 0)
+        else:
+            self.origin = (origin[0], origin[1])
+
+        if self.destination is None:
+            self.destination = (self.n - 1, self.m - 1)
+        else:
+            self.destination = (destination[0], destination[1])
+
+        # Check that the origin is valid
+        if self.origin[0] < 0 and self.origin[0] >= self.n:
+            raise AttributeError(f"Origin row is out of bounds: {self.origin[0]}")
+        if self.origin[1] < 0 and self.origin[1] >= self.m:
+            raise AttributeError(f"Origin column is out of bounds: {self.origin[1]}")
+
+        # Check that the destination is valid
+        if self.destination[0] < 0 and self.destination[0] >= self.n:
+            raise AttributeError(f"Destination row is out of bounds: {self.destination[0]}")
+        if self.destination[1] < 0 and self.destination[1] >= self.m:
+            raise AttributeError(f"Destination column is out of bounds: {self.destination[1]}")
+
+
+    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+        """Returns True if the given path goes from the origin to the destination"""
+        # Check that the path is valid
+        valid = self.is_valid_path(path)
+        if not valid[0]:
+            return valid
+
+        # Check that the path goes from the origin to the destination
+        if path[0] != self.origin:
+            return False, f"Path does not start in the origin {self.origin}"
+        if path[-1] != self.destination:
+            return False, f"Path does not end in the destination {self.destination}"
+        return True, "Complete path"
+
+    def get_destination(self):
+        return self.destination
+
+
+
+
+class DestinationSetTerrain (NoPathTerrain):
+    """
+    This class represents a Terrain with an origin and a set of destinations that the paths must go through without order.
+    """
+
+    def __init__(
+                self,
+                matrix: List[List[int]],
+                origin: Coordinate = None,
+                destinations: Set[Coordinate] = None,
+                cost_function: callable = default_cost_function,
+            ):
+        """
+        Construct a terrain from a matrix of integers
+
+        :param matrix: matrix of integers
+        :param origin: origin of the path (if None top left corner)
+        :param destinations: list of destinations in order(if None bottom right corner)
+        """
+        super().__init__(matrix, cost_function)
+        self.origin = origin
+        self.destinations = destinations
+
+        if self.origin is None:
+            self.origin = (0, 0)
+        else:
+            self.origin = (origin[0], origin[1])
+
+        if self.destinations is None:
+            self.destinations = {(self.n - 1, self.m - 1)}
+        else:
+            self.destinations = destinations
+
+        # Check that the origin is valid
+        if self.origin[0] < 0 and self.origin[0] >= self.n:
+            raise AttributeError(f"Origin row is out of bounds: {self.origin[0]}")
+        if self.origin[1] < 0 and self.origin[1] >= self.m:
+            raise AttributeError(f"Origin column is out of bounds: {self.origin[1]}")
+
+        # Check that the destinations are valid
+        for destination in self.destinations:
+            if destination[0] < 0 and destination[0] >= self.n:
+                raise AttributeError(f"Destination row is out of bounds: {destination[0]}")
+            if destination[1] < 0 and destination[1] >= self.m:
+                raise AttributeError(f"Destination column is out of bounds: {destination[1]}")
+            # Check there are not the origin
+            if destination == self.origin:
+                raise AttributeError(f"Destination is the origin: {destination}")
+
+
+    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+        """Returns True if the given path goes from the origin to all the destinations"""
+        # Check that the path is valid
+        valid = self.is_valid_path(path)
+        if not valid[0]:
+            return valid
+
+        # Check that the path goes from the origin to all the destinations
+        if path[0] != self.origin:
+            return False, f"Path does not start in the origin {self.origin}"
+
+        for destination in self.destinations:
+            if destination not in path:
+                return False, f"Path does not go through the destination {destination}"
+
+        return True, "Complete path"
+
+
+    def get_destination(self):
+        return self.destinations
