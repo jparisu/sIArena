@@ -11,6 +11,23 @@ from sIArena.utils.decorators import override
 
 class MazeGenerator(TerrainGenerator):
 
+    def generate_random_terrain(
+                self,
+                n: int,
+                m: int,
+                min_height: int = 0,
+                max_height: int = 99,
+                min_step: int = 1,
+                abruptness: float = 0.2,
+                seed: int = None,
+                origin: Coordinate = None,
+                destination: Coordinate = None
+            ) -> Terrain:
+        """ This inherited method set the min, max and step height of the terrain"""
+        return super().generate_random_terrain(
+            n=n, m=m, min_height=0, max_height=n*m, min_step=n*m, abruptness=abruptness, seed=seed, origin=origin, destination=destination)
+
+
     @override
     def generate_random_matrix_(
                 self,
@@ -31,7 +48,7 @@ class MazeGenerator(TerrainGenerator):
 
         maze = Maze(maze_n, maze_m)
 
-        matrix = np.ones((n, m))
+        matrix = np.zeros((n, m))
 
         for i in range(maze_n):
             for j in range(maze_m):
@@ -47,18 +64,12 @@ class MazeGenerator(TerrainGenerator):
                 if 2*i+1 < n and 2*j+1 < m:
                     matrix[down_right] = 1
 
-        # If n is odd, add a last space at the bottom
-        if n % 2 == 1:
-            matrix[n-1][-1] = 0
+        # Assure last cell is 0
+        matrix[-1][-1] = 0
 
-        # If m is odd, add a last space at the right
-        if m % 2 == 1:
-            matrix[-1][m-1] = 0
-
-        # If both are odd, add a last space at the bottom right
-        if n % 2 == 1 and m % 2 == 1:
-            matrix[n-1][m-2] = 0
-
+        # If both n and m are even, add a connection between the last two cells
+        if n % 2 == 0 and m % 2 == 0:
+            matrix[-2][-1] = 0
 
         return matrix
 
@@ -91,12 +102,16 @@ class Tile:
 
 class Maze:
 
-    def __init__(self, n, m):
+    def __init__(self, n, m, start_point=None):
         self.n = n
         self.m = m
         self.matrix = [[Tile() for _ in range(m)] for _ in range(n)]
 
-        current = (n//2, m//2)
+        if start_point is None:
+            current = (n//2, m//2)
+        else:
+            current = start_point
+
         self.matrix[current[0]][current[1]].visit()
         to_visit = self.surrounding_coordinates(current)
 
