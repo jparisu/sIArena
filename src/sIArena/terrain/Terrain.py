@@ -184,6 +184,8 @@ class Terrain (NoPathTerrain):
         if self.destination[1] < 0 and self.destination[1] >= self.m:
             raise AttributeError(f"Destination column is out of bounds: {self.destination[1]}")
 
+        self.destinations = [destination]
+
 
     def is_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to the destination"""
@@ -199,9 +201,26 @@ class Terrain (NoPathTerrain):
             return False, f"Path does not end in the destination {self.destination}"
         return True, "Complete path"
 
-    def get_destination(self):
-        return self.destination
 
+    def __str__(self):
+        """Returns a string representation of the terrain"""
+        # Calculate the maximum length of a cell
+        max_length = len(str(self.matrix.max()))
+        # Create the string representation
+        s = "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        for i in range(self.n):
+            for j in range(self.m):
+                s += "|"
+                if (i,j) == self.origin:
+                    s += "O "
+                elif (i,j) == self.destination:
+                    s += "X "
+                else:
+                    s += "  "
+                s += str(self[(i,j)]).rjust(max_length) + " "
+            s += "|\n"
+            s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        return s
 
 
 
@@ -214,7 +233,7 @@ class DestinationSetTerrain (NoPathTerrain):
                 self,
                 matrix: List[List[int]],
                 origin: Coordinate = None,
-                destinations: Set[Coordinate] = None,
+                destination: Set[Coordinate] = None,
                 cost_function: callable = default_cost_function,
             ):
         """
@@ -226,7 +245,7 @@ class DestinationSetTerrain (NoPathTerrain):
         """
         super().__init__(matrix, cost_function)
         self.origin = origin
-        self.destinations = destinations
+        self.destinations = destination
 
         if self.origin is None:
             self.origin = (0, 0)
@@ -236,7 +255,7 @@ class DestinationSetTerrain (NoPathTerrain):
         if self.destinations is None:
             self.destinations = {(self.n - 1, self.m - 1)}
         else:
-            self.destinations = destinations
+            self.destinations = destination
 
         # Check that the origin is valid
         if self.origin[0] < 0 and self.origin[0] >= self.n:
@@ -273,5 +292,22 @@ class DestinationSetTerrain (NoPathTerrain):
         return True, "Complete path"
 
 
-    def get_destination(self):
-        return self.destinations
+    def __str__(self):
+        """Returns a string representation of the terrain"""
+        # Calculate the maximum length of a cell
+        max_length = len(str(self.matrix.max()))
+        # Create the string representation
+        s = "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        for i in range(self.n):
+            for j in range(self.m):
+                s += "|"
+                if (i,j) == self.origin:
+                    s += "O "
+                elif (i,j) in self.destinations:
+                    s += "X "
+                else:
+                    s += "  "
+                s += str(self[(i,j)]).rjust(max_length) + " "
+            s += "|\n"
+            s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        return s

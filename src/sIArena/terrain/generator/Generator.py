@@ -19,7 +19,9 @@ class TerrainGenerator:
                 abruptness: float = 0.2,
                 seed: int = None,
                 origin: Coordinate = None,
-                destination: Coordinate = None
+                destination: Coordinate = None,
+                terrain_ctor: Terrain = Terrain,
+                cost_function: callable = None
             ) -> Terrain:
         # Max and min abruptness
         abruptness = min(1, max(0, abruptness))
@@ -45,7 +47,10 @@ class TerrainGenerator:
 
         final_m *= min_step
 
-        return Terrain(final_m, origin=origin, destination=destination)
+        if cost_function is not None:
+            return terrain_ctor(final_m, origin=origin, destination=destination, cost_function=cost_function)
+        else:
+            return terrain_ctor(final_m, origin=origin, destination=destination)
 
 
     @pure_virtual

@@ -21,11 +21,13 @@ class MazeGenerator(TerrainGenerator):
                 abruptness: float = 0.2,
                 seed: int = None,
                 origin: Coordinate = None,
-                destination: Coordinate = None
+                destination: Coordinate = None,
+                terrain_ctor: Terrain = Terrain,
+                cost_function: callable = None
             ) -> Terrain:
         """ This inherited method set the min, max and step height of the terrain"""
         return super().generate_random_terrain(
-            n=n, m=m, min_height=0, max_height=n*m, min_step=n*m, abruptness=abruptness, seed=seed, origin=origin, destination=destination)
+            n=n, m=m, min_height=0, max_height=n*m, min_step=n*m, abruptness=abruptness, seed=seed, origin=origin, destination=destination, terrain_ctor=terrain_ctor, cost_function=cost_function)
 
 
     @override
