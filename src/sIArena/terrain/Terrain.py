@@ -136,7 +136,7 @@ class NoPathTerrain:
         return True, "Valid path"
 
 
-    def get_destination(self):
+    def get_destinations(self) -> List[Coordinate]:
         return None
 
 class Terrain (NoPathTerrain):
@@ -184,8 +184,6 @@ class Terrain (NoPathTerrain):
         if self.destination[1] < 0 and self.destination[1] >= self.m:
             raise AttributeError(f"Destination column is out of bounds: {self.destination[1]}")
 
-        self.destinations = [destination]
-
 
     def is_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to the destination"""
@@ -222,6 +220,9 @@ class Terrain (NoPathTerrain):
             s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
         return s
 
+
+    def get_destinations(self) -> List[Coordinate]:
+        return [self.destination]
 
 
 class DestinationSetTerrain (NoPathTerrain):
@@ -311,3 +312,7 @@ class DestinationSetTerrain (NoPathTerrain):
             s += "|\n"
             s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
         return s
+
+
+    def get_destinations(self) -> List[Coordinate]:
+        return self.destinations

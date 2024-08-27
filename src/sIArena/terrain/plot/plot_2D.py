@@ -24,7 +24,7 @@ def plot_terrain_2D(
 
     # Mark with red the origin and destination
     plt.plot(terrain.origin[1], terrain.origin[0], 'r+')
-    for dest in terrain.destinations:
+    for dest in terrain.get_destinations():
         plt.plot(dest[1], dest[0], 'rx')
 
     # Set path legends if unset

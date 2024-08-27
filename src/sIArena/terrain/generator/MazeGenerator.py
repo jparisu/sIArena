@@ -101,6 +101,22 @@ class Tile:
         self.visited = True
 
 
+def weigthed_distrubution(n, r=50):
+
+    if n == 1:
+        return 0
+
+    choices = [i for i in range(n)]
+    weights = [1 for i in range(n)]
+
+    x = 0
+    for i in range(n):
+        weights[i] *= n-1
+        weights[i] += x
+        x += r - 1
+
+    return random.choices(choices, weights=weights, k=1)[0]
+
 
 class Maze:
 
@@ -120,8 +136,9 @@ class Maze:
 
         while to_visit:
 
-            # Get a random tile from to_visit list
-            r = random.randint(0, len(to_visit) - 1)
+            # Get a random number from 0 to n being the last ones more probable
+            n = len(to_visit)
+            r = weigthed_distrubution(n)
             next_tile = to_visit.pop(r)
 
             if self.tile(next_tile).visited:
