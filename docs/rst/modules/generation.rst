@@ -31,7 +31,7 @@ There exist different generators that create the random matrix from different cr
 .. code-block:: python
 
     from sIArena.terrain.generator.FocusedGenerator import FocusedGenerator
-    from sIArena.terrain.generator.PernilGenerator import PernilGenerator
+    from sIArena.terrain.generator.PerlinGenerator import PerlinGenerator
     from sIArena.terrain.generator.MazeGenerator import MazeGenerator
 
 In order to generate a terrain, the user must create a generator object and call the function ``generate_random_terrain``:
@@ -57,7 +57,7 @@ It tends to create very craggy and with diagonal mountains.
 .. image:: /resources/images/focused100x100_0.png
 
 
-Pernil Generator
+Perlin Generator
 ================
 
 This generator uses perlin noise to generate the terrain.
@@ -66,9 +66,9 @@ It tends to create smooth terrains with some hills and valleys.
 
 .. code-block:: python
 
-    terrain = PernilGenerator().generate_random_terrain(n=100, m=100, seed=0)
+    terrain = PerlinGenerator().generate_random_terrain(n=100, m=100, seed=0)
 
-.. image:: /resources/images/pernil100x100_0.png
+.. image:: /resources/images/perlin100x100_0.png
 
 
 

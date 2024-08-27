@@ -120,13 +120,16 @@ class NoPathTerrain:
         return cost
 
 
-    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+    def is_complete_path(self, path: Path) -> bool:
         """True if valid path"""
         return self.is_valid_path(path)
 
-
     def is_valid_path(self, path: Path) -> bool:
-        return self.why_valid_path()[0]
+        return self.why_valid_path(path)[0]
+
+    def why_valid_path(self, path: Path) -> Tuple[bool, str]:
+        """Returns True if the given path is valid"""
+        return self.why_valid_path(path)
 
     def why_valid_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path is valid"""
@@ -189,12 +192,12 @@ class Terrain (NoPathTerrain):
 
 
     def is_complete_path(self, path: Path) -> bool:
-        return self.is_complete_path()[0]
+        return self.why_complete_path(path)[0]
 
     def why_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to the destination"""
         # Check that the path is valid
-        valid = self.is_valid_path(path)
+        valid = self.why_valid_path(path)
         if not valid[0]:
             return valid
 
@@ -282,12 +285,12 @@ class DestinationSetTerrain (NoPathTerrain):
 
 
     def is_complete_path(self, path: Path) -> bool:
-        return self.why_complete_path()[0]
+        return self.why_complete_path(path)[0]
 
     def why_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to all the destinations"""
         # Check that the path is valid
-        valid = self.is_valid_path(path)
+        valid = self.why_valid_path(path)
         if not valid[0]:
             return valid
 

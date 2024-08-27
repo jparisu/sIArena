@@ -64,8 +64,9 @@ def measure_function(
             else:
                 path = result[0]
 
-        if not terrain.is_complete_path(path):
-            raise ValueError(f"Found Incorrect path with function {search_function.__name__}: {path}")
+        valid = terrain.why_complete_path(path)
+        if not valid[0]:
+            raise ValueError(f"Function {search_function.__name__} returned an invalid path: {valid[1]}")
 
         cost = terrain.get_path_cost(path)
         if cost < best_path_cost:
