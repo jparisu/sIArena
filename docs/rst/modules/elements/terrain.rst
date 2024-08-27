@@ -67,6 +67,8 @@ Methods
   - ``path``: ``Path``
 - ``is_complete_path``: returns ``True`` if the given Path is valid and complete.
   - ``path``: ``Path``
+- ``why_complete_path``: returns the same value as ``is_complete_path`` and also retrieves a string with information why the path is not complete (if this is the case).
+  - ``path``: ``Path``
 
 *Some of this methods use the element* :ref:`elements_path` *that is seeing afterwards.*
 
@@ -148,3 +150,39 @@ In order to learn how to visualize a 2D plot of the terrain, please refer to the
 .. image:: /resources/images/3dplot_5_5.png
 
 In order to learn how to visualize a 3D plot of the terrain, please refer to the :ref:`plotting_3d` section.
+
+
+Multiple destinations Terrain
+-----------------------------
+
+There is other class for Terrain that is called ``DestinationSetTerrain``.
+
+.. code-block:: python
+
+    from sIArena.terrain.Terrain import DestinationSetTerrain
+
+This class allows to have multiple destinations in the terrain.
+This means that the path must pass through all of them in order to be considered complete.
+The destinations are not sorted, so they can be visited in any order.
+
+The use and methods of this class are similar to ``Terrain`` ones.
+It changes:
+
+- The argument ``destination`` in the constructor is now a set of ``Coordinate``.
+- The method ``is_complete_path`` now checks if the path passes through all the destinations.
+- To get the destinations, use the attribute ``destinations``, that is a set of ``Coordinate``.
+
+Example on how to create a ``DestinationSetTerrain``:
+
+.. code-block:: python
+
+    from sIArena.terrain.Terrain import DestinationSetTerrain
+    from sIArena.terrain.Coordinate import Coordinate
+
+    matrix = np.array(...)
+    destinations = {Coordinate(4,4), Coordinate(0,4)}
+    # It uses the top-left cell as origin by default
+    terrain = DestinationSetTerrain(matrix, destination=destinations)
+
+    # To get the destinations of the terrain
+    destinations = terrain.destinations

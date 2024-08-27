@@ -101,7 +101,7 @@ class Tile:
         self.visited = True
 
 
-def weigthed_distrubution(n, r=50):
+def weigthed_distrubution(n, r=10):
 
     if n == 1:
         return 0

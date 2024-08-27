@@ -125,7 +125,10 @@ class NoPathTerrain:
         return self.is_valid_path(path)
 
 
-    def is_valid_path(self, path: Path) -> Tuple[bool, str]:
+    def is_valid_path(self, path: Path) -> bool:
+        return self.why_valid_path()[0]
+
+    def why_valid_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path is valid"""
         if path is None or len(path) == 0:
             return False
@@ -185,7 +188,10 @@ class Terrain (NoPathTerrain):
             raise AttributeError(f"Destination column is out of bounds: {self.destination[1]}")
 
 
-    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+    def is_complete_path(self, path: Path) -> bool:
+        return self.is_complete_path()[0]
+
+    def why_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to the destination"""
         # Check that the path is valid
         valid = self.is_valid_path(path)
@@ -256,7 +262,7 @@ class DestinationSetTerrain (NoPathTerrain):
         if self.destinations is None:
             self.destinations = {(self.n - 1, self.m - 1)}
         else:
-            self.destinations = destination
+            self.destinations = set(destination)
 
         # Check that the origin is valid
         if self.origin[0] < 0 and self.origin[0] >= self.n:
@@ -275,7 +281,10 @@ class DestinationSetTerrain (NoPathTerrain):
                 raise AttributeError(f"Destination is the origin: {destination}")
 
 
-    def is_complete_path(self, path: Path) -> Tuple[bool, str]:
+    def is_complete_path(self, path: Path) -> bool:
+        return self.why_complete_path()[0]
+
+    def why_complete_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path goes from the origin to all the destinations"""
         # Check that the path is valid
         valid = self.is_valid_path(path)
