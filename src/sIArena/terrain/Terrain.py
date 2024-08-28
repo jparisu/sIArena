@@ -121,20 +121,18 @@ class NoPathTerrain:
 
 
     def is_complete_path(self, path: Path) -> bool:
-        """True if valid path"""
         return self.is_valid_path(path)
+
+    def why_complete_path(self, path: Path) -> Tuple[bool, str]:
+        return self.why_valid_path(path)
 
     def is_valid_path(self, path: Path) -> bool:
         return self.why_valid_path(path)[0]
 
     def why_valid_path(self, path: Path) -> Tuple[bool, str]:
         """Returns True if the given path is valid"""
-        return self.why_valid_path(path)
-
-    def why_valid_path(self, path: Path) -> Tuple[bool, str]:
-        """Returns True if the given path is valid"""
         if path is None or len(path) == 0:
-            return False
+            return False, "Empty path"
 
         for i in range(len(path) - 1):
             if path[i + 1] not in self.get_neighbors(path[i]):
@@ -234,7 +232,7 @@ class Terrain (NoPathTerrain):
         return [self.destination]
 
 
-class DestinationSetTerrain (NoPathTerrain):
+class MultipleDestinationTerrain (NoPathTerrain):
     """
     This class represents a Terrain with an origin and a set of destinations that the paths must go through without order.
     """
@@ -323,6 +321,105 @@ class DestinationSetTerrain (NoPathTerrain):
                 s += str(self[(i,j)]).rjust(max_length) + " "
             s += "|\n"
             s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        return s
+
+
+    def get_destinations(self) -> Set[Coordinate]:
+        return self.destinations
+
+
+
+class SequencialDestinationTerrain (NoPathTerrain):
+    """
+    This class represents a Terrain with an origin and a list of destinations that the paths must go through in order.
+    """
+
+    def __init__(
+                self,
+                matrix: List[List[int]],
+                origin: Coordinate = None,
+                destination: List[Coordinate] = None,
+                cost_function: callable = default_cost_function,
+            ):
+        """
+        Construct a terrain from a matrix of integers
+
+        :param matrix: matrix of integers
+        :param origin: origin of the path (if None top left corner)
+        :param destinations: list of destinations in order(if None bottom right corner)
+        """
+        super().__init__(matrix, cost_function)
+        self.origin = origin
+        self.destinations = destination
+
+        if self.origin is None:
+            self.origin = (0, 0)
+        else:
+            self.origin = (origin[0], origin[1])
+
+        if self.destinations is None:
+            self.destinations = [(self.n - 1, self.m - 1)]
+        else:
+            self.destinations = destination
+
+        # Check that the origin is valid
+        if self.origin[0] < 0 and self.origin[0] >= self.n:
+            raise AttributeError(f"Origin row is out of bounds: {self.origin[0]}")
+        if self.origin[1] < 0 and self.origin[1] >= self.m:
+            raise AttributeError(f"Origin column is out of bounds: {self.origin[1]}")
+
+        # Check that the destinations are valid
+        for destination in self.destinations:
+            if destination[0] < 0 and destination[0] >= self.n:
+                raise AttributeError(f"Destination row is out of bounds: {destination[0]}")
+            if destination[1] < 0 and destination[1] >= self.m:
+                raise AttributeError(f"Destination column is out of bounds: {destination[1]}")
+
+
+    def is_complete_path(self, path: Path) -> bool:
+        return self.why_complete_path(path)[0]
+
+    def why_complete_path(self, path: Path) -> Tuple[bool, str]:
+        """Returns True if the given path goes from the origin to all the destinations in order"""
+        # Check that the path is valid
+        valid = self.why_valid_path(path)
+        if not valid[0]:
+            return valid
+
+        # Check that the path goes from the origin to all the destinations in order
+        if path[0] != self.origin:
+            return False, f"Path does not start in the origin {self.origin}"
+
+        path_index = 1
+        for i in range(len(self.destinations)):
+            while path[path_index] != self.destinations[i]:
+                path_index += 1
+                if path_index >= len(path):
+                    return False, f"Path does not go through the destination {self.destinations[i]}"
+
+        return True, "Complete path"
+
+
+    def __str__(self):
+        """Returns a string representation of the terrain"""
+        # Calculate the maximum length of a cell
+        max_length = len(str(self.matrix.max()))
+        # Create the string representation
+        s = "+" + ("-" * (max_length + 5) + "+") * self.m + "\n"
+        k = 1
+        for i in range(self.n):
+            for j in range(self.m):
+                s += "|"
+                if (i,j) == self.origin:
+                    s += "<0> "
+                elif (i,j) in self.destinations:
+                    s += f"<{k}> "
+                    k += 1
+                else:
+                    s += "  "
+                s += str(self[(i,j)]).rjust(max_length) + " "
+            s += "|\n"
+            s += "+" + ("-" * (max_length + 5) + "+") * self.m + "\n"
         return s
 
 
