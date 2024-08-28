@@ -2,9 +2,9 @@
 #####################################################################
 
 from sIArena.terrain.Terrain import Coordinate, Terrain, Path
-from sIArena.terrain.generator.PernilGenerator import PernilGenerator
+from sIArena.terrain.generator.PerlinGenerator import PerlinGenerator
 
-terrain = PernilGenerator().generate_random_terrain(
+terrain = PerlinGenerator().generate_random_terrain(
     n=25,
     m=25,
     min_height=0,

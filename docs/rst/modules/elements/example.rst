@@ -54,7 +54,6 @@ The following snippet shows the different features of the elements:
     terrain.get_neighbors((0, 0))  # Output: [(0, 1), (1, 0)]
     terrain.get_neighbors((1, 1))  # Output: [(0, 1), (1, 0), (1, 2), (2, 1)]
 
-
     # PATH
     #######
 
@@ -63,6 +62,9 @@ The following snippet shows the different features of the elements:
 
     # Check the path is complete
     terrain.is_valid_path(path, terrain)  # Output: True
+
+    # Check the path is complete
+    terrain.why_complete_path(path, terrain)  # Output: True, str
 
     # Check the path cost
     terrain.get_path_cost(path, terrain)  # Output: 12

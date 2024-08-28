@@ -8,7 +8,7 @@ from sIArena.terrain.generator.Generator import TerrainGenerator
 
 from sIArena.utils.decorators import override
 
-class PernilGenerator(TerrainGenerator):
+class PerlinGenerator(TerrainGenerator):
 
     @override
     def generate_random_matrix_(
@@ -33,12 +33,12 @@ class PernilGenerator(TerrainGenerator):
         map = np.zeros((n,m))
         for i in range(n):
             for j in range(m):
-                map[i][j] = PernilGenerator.pernil_value_generator(
+                map[i][j] = PerlinGenerator.perlin_value_generator(
                     i, j, base, scale)
         return map
 
 
-    def pernil_value_generator(
+    def perlin_value_generator(
                 i: int,
                 j: int,
                 base: int,
@@ -48,7 +48,7 @@ class PernilGenerator(TerrainGenerator):
                 lacunarity: float = 2.0
             ) -> int:
         """
-        Generates a random value for a cell of a terrain using Pernil noise
+        Generates a random value for a cell of a terrain using Perlin noise
 
         :param i: row of the cell
         :param j: column of the cell

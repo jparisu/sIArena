@@ -44,9 +44,9 @@ Use the following code changing some parameters:
 
     from sIArena.terrain.generator.Generator import TerrainGenerator
     from sIArena.terrain.generator.FocusedGenerator import FocusedGenerator
-    from sIArena.terrain.generator.PernilGenerator import PernilGenerator
+    from sIArena.terrain.generator.PerlinGenerator import PerlinGenerator
 
-    terrain = PernilGenerator().generate_random_terrain(
+    terrain = PerlinGenerator().generate_random_terrain(
         n=20,
         m=20,
         min_height=0,
