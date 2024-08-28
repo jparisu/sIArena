@@ -329,7 +329,7 @@ class MultipleDestinationTerrain (NoPathTerrain):
 
 
 
-class SequencialDestinationTerrain (NoPathTerrain):
+class SequentialDestinationTerrain (NoPathTerrain):
     """
     This class represents a Terrain with an origin and a list of destinations that the paths must go through in order.
     """

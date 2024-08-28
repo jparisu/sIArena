@@ -188,15 +188,15 @@ Example on how to create a ``MultipleDestinationTerrain``:
     destinations = terrain.destinations
 
 
-Sequencial Destinations Terrain
+Sequential Destinations Terrain
 -------------------------------
 
-There is other class for Terrain that is called ``SequencialDestinationTerrain``.
+There is other class for Terrain that is called ``SequentialDestinationTerrain``.
 This class have multiple destinations, but in this case the path must pass through them in the same order as they are provided.
 
 .. code-block:: python
 
-    from sIArena.terrain.Terrain import SequencialDestinationTerrain
+    from sIArena.terrain.Terrain import SequentialDestinationTerrain
 
 
 The use and methods of this class are similar to ``Terrain`` ones.
@@ -206,17 +206,17 @@ It changes:
 - The method ``is_complete_path`` now checks if the path passes through all the destinations in the same order as they are provided.
 - To get the destinations, use the attribute ``destinations``, that is a list of ``Coordinate``.
 
-Example on how to create a ``SequencialDestinationTerrain``:
+Example on how to create a ``SequentialDestinationTerrain``:
 
 .. code-block:: python
 
-    from sIArena.terrain.Terrain import SequencialDestinationTerrain
+    from sIArena.terrain.Terrain import SequentialDestinationTerrain
     from sIArena.terrain.Coordinate import Coordinate
 
     matrix = np.array(...)
     destinations = [Coordinate(4,4), Coordinate(0,4)]
     # It uses the top-left cell as origin by default
-    terrain = SequencialDestinationTerrain(matrix, destination=destinations)
+    terrain = SequentialDestinationTerrain(matrix, destination=destinations)
 
     # To get the destinations of the terrain
     destinations = terrain.destinations
