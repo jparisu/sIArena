@@ -1,0 +1,66 @@
+version: 1
+
+assignment:
+  id: IA_practica_0
+  notebook_function: path_finding
+  author_from: file_stem
+  author_pattern: null
+
+defaults:
+  oracle: dijkstra
+  terrain_type: Terrain
+  time_limits:
+    max_seconds: 60.0
+
+tests:
+  - id: trivial
+    generator: FocusedGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 5
+      m: 5
+      min_height: 0
+      max_height: 0
+      min_step: 10
+      abruptness: 0.7
+      origin: [0, 0]
+      destination: [4, 4]
+
+  - id: tmaze
+    generator: MazeGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 5
+      m: 5
+      min_height: 0
+      max_height: 0
+      min_step: 1
+      abruptness: 0.0
+      origin: [0, 0]
+      destination: [4, 4]
+
+  - id: large
+    generator: FocusedGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 10
+      m: 10
+      min_height: 0
+      max_height: 10
+      min_step: 5
+      abruptness: 0.55
+      origin: [0, 1]
+      destination: [9, 9]
+
+  - id: mountain
+    generator: PerlinGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 10
+      m: 10
+      min_height: 0
+      max_height: 50
+      min_step: 10
+      abruptness: 0.0372
+      origin: [1, 9]
+      destination: [5, 0]
