@@ -52,9 +52,8 @@ class NoPathTerrain:
             if len(row) == self.m:
                 AttributeError("Matrix is not rectangular")
 
-        # Check that the matrix is numpy or else convert it
-        if not isinstance(self.matrix, np.ndarray):
-            self.matrix = np.matrix(self.matrix, dtype=int)
+        # Store terrain data as a regular ndarray to avoid np.matrix deprecation warnings.
+        self.matrix = np.asarray(self.matrix, dtype=int)
 
 
     def __str__(self):
