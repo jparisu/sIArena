@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import heapq
-import math
 from typing import Callable, Dict
 
 from sIArena.terrain.Terrain import (
@@ -74,7 +73,17 @@ def extend_path(base_path: Path, segment: Path) -> Path:
     return base_path + segment[1:]
 
 
-def build_complete_path(terrain: Terrain, solve_segment: SegmentSolver) -> Path:
+def solve_single_destination(
+    terrain: Terrain,
+    solve_segment: SegmentSolver,
+) -> Path:
+    return solve_segment(terrain.origin, terrain.destination)
+
+
+def solve_sequential_destinations(
+    terrain: SequentialDestinationTerrain,
+    solve_segment: SegmentSolver,
+) -> Path:
     destinations = terrain.get_destinations()
     if not destinations:
         raise ValueError("Terrain must define at least one destination")
@@ -82,36 +91,103 @@ def build_complete_path(terrain: Terrain, solve_segment: SegmentSolver) -> Path:
     current = terrain.origin
     full_path: Path = [current]
 
-    if isinstance(terrain, MultipleDestinationTerrain):
-        remaining = set(destinations)
-
-        while remaining:
-            best_goal = None
-            best_segment = None
-            best_cost = math.inf
-
-            for goal in sorted(remaining):
-                segment = solve_segment(current, goal)
-                cost = terrain.get_path_cost(segment)
-                if cost < best_cost:
-                    best_goal = goal
-                    best_segment = segment
-                    best_cost = cost
-
-            if best_goal is None or best_segment is None:
-                raise ValueError(f"No path found from {current} to the remaining destinations")
-
-            full_path = extend_path(full_path, best_segment)
-            current = best_goal
-            remaining.remove(best_goal)
-
-        return full_path
-
-    ordered_destinations = list(destinations)
-
-    for goal in ordered_destinations:
+    for goal in destinations:
         segment = solve_segment(current, goal)
         full_path = extend_path(full_path, segment)
         current = goal
+
+    return full_path
+
+
+def solve_multiple_destinations(
+    terrain: MultipleDestinationTerrain,
+    solve_segment: SegmentSolver,
+) -> Path:
+    destinations = terrain.get_destinations()
+    if not destinations:
+        raise ValueError("Terrain must define at least one destination")
+
+    ordered_destinations = sorted(destinations)
+    segment_paths: Dict[tuple[Coordinate, Coordinate], Path] = {}
+    segment_costs: Dict[tuple[Coordinate, Coordinate], float] = {}
+    relevant_points = [terrain.origin] + ordered_destinations
+
+    for start in relevant_points:
+        for goal in ordered_destinations:
+            if start == goal:
+                continue
+            segment = solve_segment(start, goal)
+            segment_paths[(start, goal)] = segment
+            segment_costs[(start, goal)] = float(terrain.get_path_cost(segment))
+
+    destination_count = len(ordered_destinations)
+    best_cost_by_state: Dict[tuple[int, int], float] = {}
+    predecessor_by_state: Dict[tuple[int, int], int | None] = {}
+
+    for destination_index, destination in enumerate(ordered_destinations):
+        mask = 1 << destination_index
+        best_cost_by_state[(mask, destination_index)] = segment_costs[
+            (terrain.origin, destination)
+        ]
+        predecessor_by_state[(mask, destination_index)] = None
+
+    full_mask = (1 << destination_count) - 1
+    for mask in range(1, full_mask + 1):
+        for destination_index, destination in enumerate(ordered_destinations):
+            if not mask & (1 << destination_index):
+                continue
+
+            previous_mask = mask ^ (1 << destination_index)
+            if previous_mask == 0:
+                continue
+
+            best_cost = float("inf")
+            best_predecessor = None
+
+            for previous_index, previous_destination in enumerate(ordered_destinations):
+                if not previous_mask & (1 << previous_index):
+                    continue
+
+                candidate_cost = best_cost_by_state[
+                    (previous_mask, previous_index)
+                ] + segment_costs[(previous_destination, destination)]
+                if candidate_cost < best_cost:
+                    best_cost = candidate_cost
+                    best_predecessor = previous_index
+
+            best_cost_by_state[(mask, destination_index)] = best_cost
+            predecessor_by_state[(mask, destination_index)] = best_predecessor
+
+    end_index = min(
+        range(destination_count),
+        key=lambda destination_index: best_cost_by_state[(full_mask, destination_index)],
+    )
+
+    order_indices = []
+    mask = full_mask
+    current_index = end_index
+    while True:
+        order_indices.append(current_index)
+        previous_index = predecessor_by_state[(mask, current_index)]
+        if previous_index is None:
+            break
+        mask ^= 1 << current_index
+        current_index = previous_index
+    order_indices.reverse()
+
+    full_path: Path = [terrain.origin]
+    visited_destinations = set()
+    current = terrain.origin
+
+    for destination_index in order_indices:
+        goal = ordered_destinations[destination_index]
+        if goal in visited_destinations:
+            continue
+        segment = segment_paths[(current, goal)]
+        full_path = extend_path(full_path, segment)
+        current = goal
+        for coordinate in segment:
+            if coordinate in destinations:
+                visited_destinations.add(coordinate)
 
     return full_path

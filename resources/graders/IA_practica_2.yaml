@@ -1,0 +1,92 @@
+version: 1
+
+assignment:
+  id: IA_practica_2
+  notebook_function: path_finding
+  author_from: file_stem
+  author_pattern: null
+
+defaults:
+  oracle: a_star
+  terrain_type: Terrain
+  time_limits:
+    max_seconds: 60.0
+
+tests:
+  - id: dodge
+    generator: MazeGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 7
+      m: 7
+      min_height: 0
+      max_height: 0
+      min_step: 1
+      abruptness: 0.0
+      origin: [4, 0]
+      destination: [6, 0]
+
+  - id: walk
+    generator: PerlinGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 20
+      m: 20
+      min_height: 0
+      max_height: 10
+      min_step: 2
+      abruptness: 0.1
+      origin: [0, 1]
+      destination: [16, 15]
+
+  - id: fields
+    generator: PerlinGenerator
+    seeds: [43, 44, 45, 46]
+    parameters:
+      n: 100
+      m: 100
+      min_height: 0
+      max_height: 100
+      min_step: 5
+      abruptness: 0.1
+      origin: [0, 0]
+      destination: [99, 99]
+
+  - id: valleys
+    generator: PerlinGenerator
+    seeds: [43, 44, 45]
+    parameters:
+      n: 250
+      m: 250
+      min_height: 0
+      max_height: 100
+      min_step: 5
+      abruptness: 0.1
+      origin: [0, 0]
+      destination: [0, 249]
+
+  - id: ocean
+    generator: FocusedGenerator
+    seeds: [43, 44, 45]
+    parameters:
+      n: 200
+      m: 200
+      min_height: 0
+      max_height: 1000
+      min_step: 100
+      abruptness: 0.05
+      origin: [199, 0]
+      destination: [0, 199]
+
+  - id: rafting
+    generator: PerlinGenerator
+    seeds: [43, 44, 45]
+    parameters:
+      n: 800
+      m: 800
+      min_height: 0
+      max_height: 1000
+      min_step: 10
+      abruptness: 0.14
+      origin: [500, 300]
+      destination: [580, 390]

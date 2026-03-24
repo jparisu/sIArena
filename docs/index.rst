@@ -14,6 +14,7 @@ sIArena Documentation
    /rst/getting_started/installation
    /rst/getting_started/tutorial
    /rst/getting_started/tldr
+   /rst/getting_started/autograder
 
 
 .. toctree::
@@ -25,6 +26,7 @@ sIArena Documentation
    /rst/modules/measure
    /rst/modules/generation
    /rst/modules/plotting
+   /rst/modules/grading
 
 
 .. toctree::

@@ -167,3 +167,8 @@ cython_debug/
 
 # Add vscode
 .vscode/
+
+
+# Add student folder
+.entregas/
+results.csv
