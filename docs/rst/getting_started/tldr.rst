@@ -90,3 +90,19 @@ that goes from the origin to the destination of the terrain.
     min_cost, second, path = measure_function(my_algorithm, terrain)
 
 Check :ref:`measure` for more details.
+
+
+===========================
+How to grade submissions
+===========================
+
+Use the autograder application to evaluate one notebook or one zip archive of notebooks against a YAML grader configuration:
+
+.. code-block:: bash
+
+    python apps/autograder/autograder.py \
+      --input submissions.zip \
+      --config resources/graders/IA_practica_0.yaml \
+      --output results.csv
+
+Check :ref:`autograder` and :ref:`grading` for more details.

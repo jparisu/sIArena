@@ -1,10 +1,16 @@
 import ast
 import json
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, NamedTuple, Tuple, Union
 
 
 Notebook = Dict[str, object]
+
+
+class NotebookCellParseError(NamedTuple):
+    cell_index: int
+    source_code: str
+    error: SyntaxError
 
 
 def load_notebook(path: Union[str, Path]) -> Notebook:
@@ -38,3 +44,30 @@ def find_function_cells(notebook: Notebook, function_name: str) -> List[Tuple[in
                 break
 
     return matching_cells
+
+
+def find_function_cells_with_parse_errors(
+    notebook: Notebook, function_name: str
+) -> Tuple[List[Tuple[int, str]], List[NotebookCellParseError]]:
+    matching_cells: List[Tuple[int, str]] = []
+    parse_errors: List[NotebookCellParseError] = []
+
+    for index, source in iter_code_cells(notebook):
+        try:
+            module = ast.parse(source)
+        except SyntaxError as error:
+            parse_errors.append(
+                NotebookCellParseError(
+                    cell_index=index,
+                    source_code=source,
+                    error=error,
+                )
+            )
+            continue
+
+        for node in module.body:
+            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+                matching_cells.append((index, source))
+                break
+
+    return matching_cells, parse_errors

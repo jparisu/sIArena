@@ -171,3 +171,4 @@ cython_debug/
 
 # Add student folder
 .entregas/
+results.csv

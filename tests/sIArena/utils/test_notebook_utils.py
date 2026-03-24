@@ -3,7 +3,12 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from sIArena.utils.notebook_utils import find_function_cells, iter_code_cells, load_notebook
+from sIArena.utils.notebook_utils import (
+    find_function_cells,
+    find_function_cells_with_parse_errors,
+    iter_code_cells,
+    load_notebook,
+)
 
 
 class TestNotebookUtils(unittest.TestCase):
@@ -39,3 +44,20 @@ class TestNotebookUtils(unittest.TestCase):
 
         self.assertEqual(len(matching_cells), 1)
         self.assertEqual(matching_cells[0][0], 1)
+
+    def test_find_function_cells_with_parse_errors_collects_syntax_failures(self):
+        notebook = {
+            "cells": [
+                {"cell_type": "code", "source": ["def path_finding(terrain):\n", "return []\n"]},
+                {"cell_type": "code", "source": ["def helper():\n", "    return 1\n"]},
+            ]
+        }
+
+        matching_cells, parse_errors = find_function_cells_with_parse_errors(
+            notebook, "path_finding"
+        )
+
+        self.assertEqual(matching_cells, [])
+        self.assertEqual(len(parse_errors), 1)
+        self.assertEqual(parse_errors[0].cell_index, 0)
+        self.assertEqual(type(parse_errors[0].error).__name__, "IndentationError")

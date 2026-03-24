@@ -96,3 +96,72 @@ class TestNotebookLoader(unittest.TestCase):
         self.assertIsNone(notebook_result.function_result)
         self.assertIn("Function path_finding was not found", notebook_result.comments)
         self.assertEqual(notebook_result.load_error_type, "ValueError")
+
+    def test_loader_surfaces_indentation_error_from_path_finding_cell(self):
+        config = load_grader_config(GRADER_PATH)
+        loader = NotebookFunctionLoader(config.assignment)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            notebook_path = Path(tmp_dir) / "dana.ipynb"
+            _write_notebook(
+                notebook_path,
+                [
+                    [
+                        "def path_finding(terrain):\n",
+                        "return []\n",
+                    ]
+                ],
+            )
+
+            with self.assertRaisesRegex(
+                ValueError,
+                r"IndentationError in dana\.ipynb cell 0 line 2: expected an indented block",
+            ):
+                loader.load_submission(notebook_path)
+
+    def test_suite_reports_indentation_error_in_comments(self):
+        suite = GraderTestSuite.from_yaml(GRADER_PATH)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            notebook_path = Path(tmp_dir) / "eve.ipynb"
+            _write_notebook(
+                notebook_path,
+                [
+                    [
+                        "def path_finding(terrain):\n",
+                        "return []\n",
+                    ]
+                ],
+            )
+
+            notebook_result = suite.evaluate_notebook(notebook_path)
+
+        self.assertIsNone(notebook_result.function_result)
+        self.assertIn("IndentationError in eve.ipynb cell 0 line 2", notebook_result.comments)
+        self.assertEqual(notebook_result.load_error_type, "ValueError")
+
+    def test_loader_ignores_unrelated_parse_error_when_valid_function_exists(self):
+        config = load_grader_config(GRADER_PATH)
+        loader = NotebookFunctionLoader(config.assignment)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            notebook_path = Path(tmp_dir) / "frank.ipynb"
+            _write_notebook(
+                notebook_path,
+                [
+                    [
+                        "def helper(\n",
+                    ],
+                    [
+                        "from sIArena.path_finding import dijkstra\n",
+                        "\n",
+                        "def path_finding(terrain):\n",
+                        "    return dijkstra(terrain)\n",
+                    ],
+                ],
+            )
+
+            submission = loader.load_submission(notebook_path)
+
+        self.assertEqual(submission.cell_index, 1)
+        self.assertTrue(callable(submission.search_function))

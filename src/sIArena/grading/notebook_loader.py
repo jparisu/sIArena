@@ -3,7 +3,11 @@ from pathlib import Path
 from typing import Optional, Union
 
 from sIArena.grading.models import AssignmentSpec, NotebookSubmission
-from sIArena.utils.notebook_utils import find_function_cells, load_notebook
+from sIArena.utils.notebook_utils import (
+    NotebookCellParseError,
+    find_function_cells_with_parse_errors,
+    load_notebook,
+)
 
 
 class NotebookFunctionLoader:
@@ -13,9 +17,14 @@ class NotebookFunctionLoader:
     def load_submission(self, notebook_path: Union[str, Path]) -> NotebookSubmission:
         notebook_path = Path(notebook_path)
         notebook = load_notebook(notebook_path)
-        matching_cells = find_function_cells(notebook, self.assignment.notebook_function)
+        matching_cells, parse_errors = find_function_cells_with_parse_errors(
+            notebook, self.assignment.notebook_function
+        )
 
         if len(matching_cells) == 0:
+            parse_error = self._select_relevant_parse_error(parse_errors)
+            if parse_error is not None:
+                raise ValueError(self._format_parse_error(notebook_path, parse_error))
             raise ValueError(
                 f"Function {self.assignment.notebook_function} was not found in {notebook_path.name}"
             )
@@ -52,6 +61,29 @@ class NotebookFunctionLoader:
                 f"The notebook cell in {notebook_path.name} did not define a callable {self.assignment.notebook_function}"
             )
         return search_function
+
+    def _select_relevant_parse_error(
+        self,
+        parse_errors: list[NotebookCellParseError],
+    ) -> Optional[NotebookCellParseError]:
+        if len(parse_errors) == 0:
+            return None
+
+        for parse_error in parse_errors:
+            if self.assignment.notebook_function in parse_error.source_code:
+                return parse_error
+        return parse_errors[0]
+
+    def _format_parse_error(
+        self,
+        notebook_path: Path,
+        parse_error: NotebookCellParseError,
+    ) -> str:
+        error = parse_error.error
+        location = f"{notebook_path.name} cell {parse_error.cell_index}"
+        if error.lineno is not None:
+            location = f"{location} line {error.lineno}"
+        return f"{type(error).__name__} in {location}: {error.msg}"
 
     def derive_author(self, notebook_path: Union[str, Path]) -> str:
         notebook_path = Path(notebook_path)

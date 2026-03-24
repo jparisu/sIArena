@@ -81,7 +81,7 @@ class GraderTestSuite:
                 source_code="",
                 search_function=lambda terrain: terrain,
             )
-            message = _extract_last_error_line(f"{type(exc).__name__}: {exc}")
+            message = _extract_last_error_line(str(exc))
             return NotebookEvaluationResult(
                 submission=fallback_submission,
                 function_result=None,
