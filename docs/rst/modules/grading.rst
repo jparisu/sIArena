@@ -1,8 +1,8 @@
 .. _grading:
 
-############
+###########
 Grading API
-############
+###########
 
 .. contents::
     :local:
@@ -85,9 +85,9 @@ Supported named cost functions:
 - ``default_cost_function``
 
 
-==========================
+===========================
 Loading and reusing a suite
-==========================
+===========================
 
 The class ``GraderTestSuite`` stores the parsed configuration, prepared terrain cases, and cached oracle results.
 This is the recommended entry point when the same YAML file will be used to evaluate many notebooks.
@@ -125,9 +125,9 @@ The notebook loader is provided by ``NotebookFunctionLoader`` and is used intern
     print(notebook_result.comments)
 
 
-===================
+=================
 Batch zip grading
-===================
+=================
 
 The batch grader accepts a zip archive, evaluates every notebook inside it, and can write the final CSV file.
 
@@ -151,9 +151,9 @@ For explicit zip grading, ``ZipNotebookGrader`` is also available:
     batch_result = grader.grade_archive_to_csv("submissions.zip", "results.csv")
 
 
-================
+==============
 Result objects
-================
+==============
 
 The grading module exposes structured result objects:
 

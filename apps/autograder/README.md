@@ -48,7 +48,9 @@ Use a different branch, tag, or commit with `SIARENA_REF`:
 docker build \
   -f apps/autograder/Dockerfile \
   --build-arg SIARENA_REF=my-branch \
-  -t siarena-autograder .
+  --no-cache \
+  -t siarena-autograder \
+  .
 ```
 
 If you do not pass `SIARENA_REF`, the image uses `main`.
