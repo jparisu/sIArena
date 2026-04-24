@@ -193,17 +193,14 @@ Multi Endpoint Terrain
 
 There is another Terrain class called ``MultiEndpointTerrain``.
 This class is used when the problem has several possible starting points and several possible ending points.
-It is useful for exercises where there is not a single mandatory origin-destination pair, but a family of acceptable routes.
-
-For example, imagine a terrain with several entrances and several exits.
-A correct path may start at any entrance and may finish at any exit.
-The path is not required to use every entrance, and it is not required to visit every exit.
-It only needs to choose one valid origin and one valid destination, while still following the same neighbor rules as every other terrain.
+Paths valid are those that start in any of the allowed origins and end in any of the allowed destinations, as long as they are valid paths in the terrain.
 
 .. code-block:: python
 
     from sIArena.terrain.Terrain import MultiEndpointTerrain
 
+Difference with Terrain
+^^^^^^^^^^^^^^^^^^^^^^^
 
 The complete-path rule for ``MultiEndpointTerrain`` is:
 
@@ -213,26 +210,19 @@ The complete-path rule for ``MultiEndpointTerrain`` is:
 - The path may pass through other origins or destinations in the middle, but this is not required.
 - The path does not need to visit all destinations.
 
-This is the main difference with the other terrain types:
+This ``MultiEndpointTerrain`` class is similar to ``Terrain`` with some minor differences:
 
-- ``Terrain`` has exactly one origin and one destination. The path must start at that origin and end at that destination.
-- ``MultipleDestinationTerrain`` has one origin and several destinations. The path must start at the origin and go through all destinations, in any order.
-- ``SequentialDestinationTerrain`` has one origin and several destinations. The path must start at the origin and go through all destinations in the given order.
-- ``MultiEndpointTerrain`` has several origins and several destinations. The path must start at any one origin and end at any one destination.
+- Method `get_origins()` returns the set of allowed origins, instead of a single origin.
+- Method `get_destinations()` returns the set of allowed destinations, instead of a single destination.
+- There is no attribute ``origin`` or ``destination``.
 
 The constructor keeps the same parameter names as the standard ``Terrain`` constructor:
 
 - ``origin``: a single ``Coordinate`` or a collection of ``Coordinate`` values.
 - ``destination``: a single ``Coordinate`` or a collection of ``Coordinate`` values.
 
-Although the constructor argument is named ``origin`` for compatibility with terrain generators,
-the terrain stores the normalized value in the attribute ``origins``.
-The destinations are stored in the attribute ``destinations``.
-Both attributes are sets of coordinates, because order is not relevant for this terrain type.
-
-If ``origin`` is not provided, the default origin set is ``{(0, 0)}``.
-If ``destination`` is not provided, the default destination set is ``{(n-1, m-1)}``.
-This means a default ``MultiEndpointTerrain`` behaves like a standard ``Terrain`` with one origin and one destination, except that the endpoints are exposed as sets.
+Examples
+^^^^^^^^
 
 Example with several origins and several destinations:
 
@@ -287,47 +277,6 @@ And this path is not complete because it does not end in one of the allowed dest
     terrain.is_valid_path(wrong_end)       # True
     terrain.is_complete_path(wrong_end)    # False
 
-
-When using the built-in ``a_star`` or ``dijkstra`` functions with a ``MultiEndpointTerrain``,
-the library searches among the possible origin-destination pairs and returns a minimum-cost complete path.
-In other words, it does not simply choose the first origin and the first destination.
-It compares the path cost for each allowed pair and returns the cheapest valid route found.
-
-.. code-block:: python
-
-    from sIArena.path_finding import a_star, dijkstra
-
-    path = a_star(terrain)
-    terrain.is_complete_path(path)  # True
-
-    other_path = dijkstra(terrain)
-    terrain.is_complete_path(other_path)  # True
-
-
-This terrain can also be used in grader YAML files by setting ``terrain_type`` to ``MultiEndpointTerrain``.
-The ``origin`` and ``destination`` parameters may be written as a single coordinate or as a list of coordinates.
-
-.. code-block:: yaml
-
-    tests:
-      - id: multi-endpoint
-        generator: FocusedGenerator
-        terrain_type: MultiEndpointTerrain
-        seeds: [1, 2, 3]
-        parameters:
-          n: 10
-          m: 10
-          origin:
-            - [0, 0]
-            - [9, 0]
-          destination:
-            - [0, 9]
-            - [9, 9]
-
-
-The string representation marks origins with ``O`` and destinations with ``X``.
-If the same coordinate is both an origin and a destination, it is marked with ``*``.
-This can happen in small examples or in problems where a zero-length path is meaningful.
 
 
 Sequential Destinations Terrain
