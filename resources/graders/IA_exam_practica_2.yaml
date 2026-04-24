@@ -28,8 +28,8 @@ tests:
         - [0, 0]
         - [6, 6]
       destination:
-        - [6, 0]
-        - [0, 6]
+        - [6, 1]
+        - [1, 6]
         - [3, 3]
 
   - id: dodge
@@ -46,7 +46,7 @@ tests:
       destination:
         - [6, 0]
         - [1, 2]
-        - [5, 5]
+        - [5, 4]
 
   - id: walk
     generator: PerlinGenerator
@@ -60,8 +60,8 @@ tests:
       abruptness: 0.1
       origin:
         - [0, 1]
-        - [2, 0]
-        - [5, 4]
+        - [4, 0]
+        - [5, 6]
       destination: [16, 15]
 
   - id: fields
@@ -93,10 +93,10 @@ tests:
         - [248, 1]
         - [248, 248]
       destination:
-        - [3, 3]
-        - [3, 246]
-        - [246, 3]
-        - [246, 246]
+        - [5, 5]
+        - [5, 245]
+        - [245, 5]
+        - [245, 245]
 
   - id: ocean
     generator: FocusedGenerator
@@ -109,13 +109,14 @@ tests:
       min_step: 100
       abruptness: 0.05
       origin:
-        - [199, 0]
-        - [180, 20]
-        - [150, 50]
+        - [160, 20]
+        - [175, 20]
+        - [180, 40]
       destination:
-        - [0, 199]
-        - [20, 180]
-        - [50, 150]
+        - [5, 195]
+        - [45, 160]
+        - [60, 190]
+        - [10, 150]
 
   - id: rafting
     generator: PerlinGenerator
@@ -133,5 +134,5 @@ tests:
         - [480, 320]
       destination:
         - [580, 390]
-        - [600, 410]
-        - [560, 370]
+        - [600, 370]
+        - [560, 410]

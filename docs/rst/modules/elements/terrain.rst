@@ -1,9 +1,9 @@
 
 .. _elements_terrain:
 
-=======
+#######
 Terrain
-=======
+#######
 
 .. code-block:: python
 
@@ -22,7 +22,7 @@ These cells are used to determine the start and end of the path to be found.
 It also counts with a *cost_function* that is used to determine the cost of moving from one cell to another depending on their values.
 
 Attributes
-----------
+**********
 
 - ``n``: number of rows
 - ``m``: number of columns
@@ -32,7 +32,7 @@ Attributes
 - ``cost_function``: function that receives 2 integers ``x,y`` and returns the cost of moving from one cell with value ``x`` to another with value ``y``
 
 Built-in Methods
-----------------
+****************
 
 - ``str``: returns a string representation of the matrix of the terrain.
   The origin and destination cells are marked with the characters ``+`` and ``x`` respectively.
@@ -55,7 +55,7 @@ Built-in Methods
 
 
 Methods
--------
+*******
 
 - ``size``: returns a tuple with ``(n,m)``.
 - ``get_neighbors``: returns a list of the coordinates of the cells that are adjacent to the given cell.
@@ -76,7 +76,7 @@ Methods
 .. _elements_terrain_cost_function:
 
 Cost Function
--------------
+*************
 
 The cost function is a function that receives 2 integers ``x,y``
 referring to the *height* of 2 adjacent cells,
@@ -85,7 +85,7 @@ and returns the cost of moving from one cell with value ``x`` to another with va
 .. _elements_terrain_default_cost_function:
 
 Default cost function
-*********************
+=====================
 
 The default cost function is as follows:
 
@@ -106,13 +106,13 @@ The following snippet shows the implementation of the default cost function:
 
 
 Visualization
--------------
+*************
 
 There are several ways to easily visualize the terrain:
 
 
 String
-******
+======
 
 Function ``str`` returns a string representation of the matrix of the terrain:
 The origin and destination cells are marked with the characters ``+`` and ``x`` respectively.
@@ -137,7 +137,7 @@ The origin and destination cells are marked with the characters ``+`` and ``x`` 
 
 
 2D plot
-*******
+=======
 
 .. image:: /resources/images/2dplot_5_5.png
 
@@ -145,7 +145,7 @@ In order to learn how to visualize a 2D plot of the terrain, please refer to the
 
 
 3D plot
-*******
+=======
 
 .. image:: /resources/images/3dplot_5_5.png
 
@@ -153,7 +153,7 @@ In order to learn how to visualize a 3D plot of the terrain, please refer to the
 
 
 Multiple Destinations Terrain
------------------------------
+*****************************
 
 There is other class for Terrain that is called ``MultipleDestinationTerrain``.
 This class allows to have multiple destinations in the terrain.
@@ -189,7 +189,7 @@ Example on how to create a ``MultipleDestinationTerrain``:
 
 
 Multi Endpoint Terrain
-----------------------
+**********************
 
 There is another Terrain class called ``MultiEndpointTerrain``.
 This class is used when the problem has several possible starting points and several possible ending points.
@@ -200,7 +200,7 @@ Paths valid are those that start in any of the allowed origins and end in any of
     from sIArena.terrain.Terrain import MultiEndpointTerrain
 
 Difference with Terrain
-^^^^^^^^^^^^^^^^^^^^^^^
+=======================
 
 The complete-path rule for ``MultiEndpointTerrain`` is:
 
@@ -222,7 +222,7 @@ The constructor keeps the same parameter names as the standard ``Terrain`` const
 - ``destination``: a single ``Coordinate`` or a collection of ``Coordinate`` values.
 
 Examples
-^^^^^^^^
+========
 
 Example with several origins and several destinations:
 
@@ -280,7 +280,7 @@ And this path is not complete because it does not end in one of the allowed dest
 
 
 Sequential Destinations Terrain
--------------------------------
+*******************************
 
 There is other class for Terrain that is called ``SequentialDestinationTerrain``.
 This class have multiple destinations, but in this case the path must pass through them in the same order as they are provided.
