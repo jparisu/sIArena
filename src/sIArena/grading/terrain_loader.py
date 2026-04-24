@@ -3,6 +3,7 @@ from typing import Callable, Dict, List, Optional, Type
 
 from sIArena.grading.models import GraderConfig, TerrainCase, TerrainTestSpec
 from sIArena.terrain.Terrain import (
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     NoPathTerrain,
     SequentialDestinationTerrain,
@@ -24,6 +25,7 @@ GENERATOR_REGISTRY: Dict[str, Type[TerrainGenerator]] = {
 TERRAIN_REGISTRY: Dict[str, Type[NoPathTerrain]] = {
     "NoPathTerrain": NoPathTerrain,
     "Terrain": Terrain,
+    "MultiEndpointTerrain": MultiEndpointTerrain,
     "MultipleDestinationTerrain": MultipleDestinationTerrain,
     "SequentialDestinationTerrain": SequentialDestinationTerrain,
 }

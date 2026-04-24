@@ -22,8 +22,9 @@ def plot_terrain_2D(
     plt.clf()
     plt.imshow(terrain.matrix, cmap=cmap)
 
-    # Mark with red the origin and destination
-    plt.plot(terrain.origin[1], terrain.origin[0], 'r+')
+    # Mark with red the origins and destinations
+    for origin in terrain.get_origins():
+        plt.plot(origin[1], origin[0], 'r+')
     for dest in terrain.get_destinations():
         plt.plot(dest[1], dest[0], 'rx')
 

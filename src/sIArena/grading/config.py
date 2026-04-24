@@ -124,7 +124,9 @@ def _normalize_parameters(
     parameters = dict(raw_parameters)
 
     if "origin" in parameters:
-        parameters["origin"] = _normalize_coordinate(parameters["origin"])
+        parameters["origin"] = _normalize_origin(
+            parameters["origin"], terrain_type_name
+        )
     if "destination" in parameters:
         parameters["destination"] = _normalize_destination(
             parameters["destination"], terrain_type_name
@@ -139,11 +141,40 @@ def _normalize_coordinate(raw_coordinate: Sequence[Any]) -> Coordinate:
     return int(raw_coordinate[0]), int(raw_coordinate[1])
 
 
+def _is_raw_coordinate(raw_value: Any) -> bool:
+    return (
+        isinstance(raw_value, Sequence)
+        and not isinstance(raw_value, (str, bytes))
+        and len(raw_value) == 2
+        and not isinstance(raw_value[0], Sequence)
+        and not isinstance(raw_value[0], (str, bytes))
+        and not isinstance(raw_value[1], Sequence)
+        and not isinstance(raw_value[1], (str, bytes))
+    )
+
+
+def _normalize_coordinate_set(raw_coordinates: Any) -> Any:
+    if _is_raw_coordinate(raw_coordinates):
+        return {_normalize_coordinate(raw_coordinates)}
+    return {
+        _normalize_coordinate(coordinate)
+        for coordinate in raw_coordinates
+    }
+
+
+def _normalize_origin(raw_origin: Any, terrain_type_name: str) -> Any:
+    if terrain_type_name == "MultiEndpointTerrain":
+        return _normalize_coordinate_set(raw_origin)
+    return _normalize_coordinate(raw_origin)
+
+
 def _normalize_destination(raw_destination: Any, terrain_type_name: str) -> Any:
     if terrain_type_name == "NoPathTerrain":
         return None
     if terrain_type_name == "Terrain":
         return _normalize_coordinate(raw_destination)
+    if terrain_type_name == "MultiEndpointTerrain":
+        return _normalize_coordinate_set(raw_destination)
     if terrain_type_name == "MultipleDestinationTerrain":
         return {
             _normalize_coordinate(coordinate)

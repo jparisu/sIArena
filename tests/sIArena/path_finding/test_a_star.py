@@ -2,6 +2,7 @@ import unittest
 
 from sIArena.path_finding import a_star, dijkstra, heuristic
 from sIArena.terrain.Terrain import (
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     SequentialDestinationTerrain,
     Terrain,
@@ -79,3 +80,20 @@ class TestPathFindingDispatch(unittest.TestCase):
 
         self.assertEqual(terrain.get_path_cost(a_star_path), 9)
         self.assertEqual(terrain.get_path_cost(dijkstra_path), 9)
+
+    def test_multi_endpoint_terrain_solves_cheapest_origin_destination_pair(self):
+        terrain = MultiEndpointTerrain(
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+            origin={(0, 0), (2, 0)},
+            destination={(0, 2), (2, 1)},
+        )
+
+        a_star_path = a_star(terrain)
+        dijkstra_path = dijkstra(terrain)
+
+        self.assertTrue(terrain.is_complete_path(a_star_path))
+        self.assertTrue(terrain.is_complete_path(dijkstra_path))
+        self.assertEqual(terrain.get_path_cost(a_star_path), 1)
+        self.assertEqual(terrain.get_path_cost(dijkstra_path), 1)
+        self.assertEqual(a_star_path, [(2, 0), (2, 1)])
+        self.assertEqual(dijkstra_path, [(2, 0), (2, 1)])

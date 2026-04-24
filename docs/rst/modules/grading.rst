@@ -76,6 +76,7 @@ Supported generators:
 Supported terrain types:
 
 - ``Terrain``
+- ``MultiEndpointTerrain``
 - ``MultipleDestinationTerrain``
 - ``SequentialDestinationTerrain``
 - ``NoPathTerrain``
