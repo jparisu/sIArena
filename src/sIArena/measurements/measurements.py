@@ -32,7 +32,7 @@ def measure_function(
     def func_wrapper(func, terrain, result, errors):
         try:
             result.append(func(terrain))
-        except Exception as exc:  # pragma: no cover - behavior validated from the caller side
+        except BaseException as exc:  # pragma: no cover - behavior validated from the caller side
             errors.append((exc, traceback.format_exc()))
 
     best_path_cost = math.inf
