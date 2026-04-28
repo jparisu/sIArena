@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from sIArena.path_finding._shared import (
     shortest_path,
+    solve_any_origin_any_destination,
     solve_multiple_destinations,
     solve_sequential_destinations,
     solve_single_destination,
 )
 from sIArena.terrain.Terrain import (
     Coordinate,
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     Path,
     SequentialDestinationTerrain,
@@ -49,7 +51,18 @@ def _solve_multiple_destination_terrain(
     )
 
 
+def _solve_multi_endpoint_terrain(
+    terrain: MultiEndpointTerrain,
+) -> Path:
+    return solve_any_origin_any_destination(
+        terrain,
+        lambda start, goal: shortest_path(terrain, start, goal, _zero_heuristic),
+    )
+
+
 def dijkstra(terrain: Terrain) -> Path:
+    if isinstance(terrain, MultiEndpointTerrain):
+        return _solve_multi_endpoint_terrain(terrain)
     if isinstance(terrain, MultipleDestinationTerrain):
         return _solve_multiple_destination_terrain(terrain)
     if isinstance(terrain, SequentialDestinationTerrain):

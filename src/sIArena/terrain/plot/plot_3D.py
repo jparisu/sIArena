@@ -39,11 +39,13 @@ def plot_terrain_3D(
         # Plot the surface
         ax.plot_surface(X, Y, Z, cmap=cmap)
 
-        # Plot the origin point
-        ax.plot([terrain.origin[0]], [terrain.origin[1]], [terrain[terrain.origin]], 'r+', markersize=5, zorder=6)
+        # Plot the origin points
+        for origin in terrain.get_origins():
+            ax.plot([origin[0]], [origin[1]], [terrain[origin]], 'r+', markersize=5, zorder=6)
 
-        # Plot the destination point
-        ax.plot([terrain.destination[0]], [terrain.destination[1]], [terrain[terrain.destination]], 'rx', markersize=5, zorder=6)
+        # Plot the destination points
+        for destination in terrain.get_destinations():
+            ax.plot([destination[0]], [destination[1]], [terrain[destination]], 'rx', markersize=5, zorder=6)
 
         # Plot the paths
         for i, p in enumerate(paths):

@@ -4,6 +4,7 @@ import unittest
 from sIArena.grading import build_terrain_case, build_terrain_cases, load_grader_config
 from sIArena.grading.config import parse_grader_config
 from sIArena.terrain.Terrain import (
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     NoPathTerrain,
     SequentialDestinationTerrain,
@@ -77,6 +78,34 @@ class TestTerrainLoader(unittest.TestCase):
         self.assertEqual(multi_case.terrain.get_destinations(), {(0, 4), (4, 4)})
         self.assertIsInstance(seq_case.terrain, SequentialDestinationTerrain)
         self.assertEqual(seq_case.terrain.get_destinations(), [(0, 2), (4, 4)])
+
+    def test_build_multi_endpoint_terrain(self):
+        config = parse_grader_config(
+            {
+                "version": 1,
+                "assignment": {"id": "demo"},
+                "tests": [
+                    {
+                        "id": "multi-endpoint",
+                        "generator": "FocusedGenerator",
+                        "terrain_type": "MultiEndpointTerrain",
+                        "seeds": [13],
+                        "parameters": {
+                            "n": 5,
+                            "m": 5,
+                            "origin": [[0, 0], [4, 0]],
+                            "destination": [[0, 4], [4, 4]],
+                        },
+                    },
+                ],
+            }
+        )
+
+        terrain_case = build_terrain_case(config.tests[0], 13)
+
+        self.assertIsInstance(terrain_case.terrain, MultiEndpointTerrain)
+        self.assertEqual(terrain_case.terrain.get_origins(), {(0, 0), (4, 0)})
+        self.assertEqual(terrain_case.terrain.get_destinations(), {(0, 4), (4, 4)})
 
     def test_build_no_path_terrain_and_named_cost_function(self):
         config = parse_grader_config(

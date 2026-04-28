@@ -27,6 +27,7 @@ In order to be **complete**, the path must be valid and:
 - The first coordinate must be the ``origin`` point of the terrain.
 - The last coordinate must be the ``destination`` point of the terrain.
 - In case of multiple destinations, the path must pass through all of them (order is not important).
+- In case of multi endpoint terrains, the path must start in any allowed origin and end in any allowed destination.
 
 
 In Python, the Path is represented as a list of coordinates:

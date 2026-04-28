@@ -63,6 +63,45 @@ class TestGraderConfig(unittest.TestCase):
         self.assertEqual(config.tests[0].cost_function_name, "default_cost_function")
         self.assertEqual(config.tests[1].parameters["destination"], [(0, 1), (3, 3)])
 
+    def test_parse_multi_endpoint_origin_and_destination_sets(self):
+        config = parse_grader_config(
+            {
+                "version": 1,
+                "assignment": {"id": "demo"},
+                "tests": [
+                    {
+                        "id": "multi-endpoint",
+                        "generator": "FocusedGenerator",
+                        "terrain_type": "MultiEndpointTerrain",
+                        "seeds": [9],
+                        "parameters": {
+                            "n": 4,
+                            "m": 4,
+                            "origin": [[0, 0], [3, 0]],
+                            "destination": [[0, 3], [3, 3]],
+                        },
+                    },
+                    {
+                        "id": "single-endpoint",
+                        "generator": "FocusedGenerator",
+                        "terrain_type": "MultiEndpointTerrain",
+                        "seeds": [10],
+                        "parameters": {
+                            "n": 4,
+                            "m": 4,
+                            "origin": [1, 0],
+                            "destination": [2, 3],
+                        },
+                    },
+                ],
+            }
+        )
+
+        self.assertEqual(config.tests[0].parameters["origin"], {(0, 0), (3, 0)})
+        self.assertEqual(config.tests[0].parameters["destination"], {(0, 3), (3, 3)})
+        self.assertEqual(config.tests[1].parameters["origin"], {(1, 0)})
+        self.assertEqual(config.tests[1].parameters["destination"], {(2, 3)})
+
     def test_parse_no_path_terrain(self):
         config = parse_grader_config(
             {

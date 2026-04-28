@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 
 from sIArena.terrain.Terrain import (
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     NoPathTerrain,
     SequentialDestinationTerrain,
@@ -129,6 +130,62 @@ class TestMultipleDestinationTerrain(unittest.TestCase):
     def test_rejects_destination_equal_to_origin(self):
         with self.assertRaisesRegex(AttributeError, "Destination is the origin"):
             MultipleDestinationTerrain([[1]], origin=(0, 0), destination={(0, 0)})
+
+
+class TestMultiEndpointTerrain(unittest.TestCase):
+    def setUp(self):
+        self.terrain = MultiEndpointTerrain(
+            [[1, 2, 3], [4, 5, 6]],
+            origin={(0, 0), (1, 0)},
+            destination={(0, 2), (1, 2)},
+        )
+
+    def test_default_origin_and_destination_sets(self):
+        terrain = MultiEndpointTerrain([[1, 2], [3, 4]])
+
+        self.assertEqual(terrain.get_origins(), {(0, 0)})
+        self.assertEqual(terrain.get_destinations(), {(1, 1)})
+
+    def test_single_coordinate_inputs_are_normalized_to_sets(self):
+        terrain = MultiEndpointTerrain(
+            [[1, 2], [3, 4]],
+            origin=(1, 0),
+            destination=(0, 1),
+        )
+
+        self.assertEqual(terrain.get_origins(), {(1, 0)})
+        self.assertEqual(terrain.get_destinations(), {(0, 1)})
+
+    def test_complete_path_accepts_any_origin_and_any_destination(self):
+        self.assertTrue(self.terrain.is_complete_path([(1, 0), (1, 1), (1, 2)]))
+        self.assertTrue(self.terrain.is_complete_path([(0, 0), (0, 1), (0, 2)]))
+
+    def test_complete_path_rejects_wrong_start_or_end(self):
+        valid, message = self.terrain.why_complete_path([(0, 1), (0, 2)])
+        self.assertFalse(valid)
+        self.assertIn("Path does not start in any origin", message)
+
+        valid, message = self.terrain.why_complete_path([(0, 0), (0, 1)])
+        self.assertFalse(valid)
+        self.assertIn("Path does not end in any destination", message)
+
+    def test_invalid_steps_are_rejected_before_endpoint_checks(self):
+        self.assertEqual(
+            self.terrain.why_complete_path([(0, 0), (1, 1), (1, 2)]),
+            (False, "Invalid path: (0, 0) -> (1, 1)"),
+        )
+
+    def test_str_marks_all_origins_and_destinations(self):
+        text = str(self.terrain)
+
+        self.assertGreaterEqual(text.count("|O "), 2)
+        self.assertGreaterEqual(text.count("|X "), 2)
+
+    def test_rejects_out_of_bounds_endpoints(self):
+        with self.assertRaisesRegex(AttributeError, "Origin row is out of bounds"):
+            MultiEndpointTerrain([[1]], origin={(-1, 0)}, destination={(0, 0)})
+        with self.assertRaisesRegex(AttributeError, "Destination column is out of bounds"):
+            MultiEndpointTerrain([[1]], origin={(0, 0)}, destination={(0, 1)})
 
 
 class TestSequentialDestinationTerrain(unittest.TestCase):

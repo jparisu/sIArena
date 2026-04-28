@@ -8,6 +8,27 @@ Coordinate = Tuple[int,int]
 Path = List[Coordinate]
 
 
+def _is_coordinate(value) -> bool:
+    return (
+        isinstance(value, (list, tuple))
+        and len(value) == 2
+        and not isinstance(value[0], (list, tuple, set))
+        and not isinstance(value[1], (list, tuple, set))
+    )
+
+
+def _as_coordinate(value) -> Coordinate:
+    return (value[0], value[1])
+
+
+def _as_coordinate_set(value, default: Coordinate) -> Set[Coordinate]:
+    if value is None:
+        return {default}
+    if _is_coordinate(value):
+        return {_as_coordinate(value)}
+    return {_as_coordinate(coordinate) for coordinate in value}
+
+
 def default_cost_function(origin_height: int, target_height: int) -> int:
     """Default cost function"""
     if origin_height == target_height:
@@ -142,6 +163,9 @@ class NoPathTerrain:
     def get_destinations(self) -> List[Coordinate]:
         return None
 
+    def get_origins(self) -> List[Coordinate]:
+        return None
+
 class Terrain (NoPathTerrain):
     """
     This class is a Terrain with an origin and a destination
@@ -229,6 +253,9 @@ class Terrain (NoPathTerrain):
 
     def get_destinations(self) -> List[Coordinate]:
         return [self.destination]
+
+    def get_origins(self) -> List[Coordinate]:
+        return [self.origin]
 
 
 class MultipleDestinationTerrain (NoPathTerrain):
@@ -321,6 +348,98 @@ class MultipleDestinationTerrain (NoPathTerrain):
             s += "|\n"
             s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
         return s
+
+
+    def get_destinations(self) -> Set[Coordinate]:
+        return self.destinations
+
+    def get_origins(self) -> List[Coordinate]:
+        return [self.origin]
+
+
+class MultiEndpointTerrain (NoPathTerrain):
+    """
+    This class represents a Terrain with several origins and several possible destinations.
+
+    A path is complete when it is valid, starts in any of the origins, and ends in any
+    of the destinations.
+    """
+
+    def __init__(
+                self,
+                matrix: List[List[int]],
+                origin = None,
+                destination = None,
+                cost_function: callable = default_cost_function,
+            ):
+        """
+        Construct a terrain from a matrix of integers
+
+        :param matrix: matrix of integers
+        :param origin: coordinate or collection of coordinates where paths may start
+        :param destination: coordinate or collection of coordinates where paths may end
+        """
+        super().__init__(matrix, cost_function)
+        self.origins = _as_coordinate_set(origin, (0, 0))
+        self.destinations = _as_coordinate_set(destination, (self.n - 1, self.m - 1))
+
+        if len(self.origins) == 0:
+            raise AttributeError("MultiEndpointTerrain must have at least one origin")
+        if len(self.destinations) == 0:
+            raise AttributeError("MultiEndpointTerrain must have at least one destination")
+
+        for origin in self.origins:
+            if origin[0] < 0 or origin[0] >= self.n:
+                raise AttributeError(f"Origin row is out of bounds: {origin[0]}")
+            if origin[1] < 0 or origin[1] >= self.m:
+                raise AttributeError(f"Origin column is out of bounds: {origin[1]}")
+
+        for destination in self.destinations:
+            if destination[0] < 0 or destination[0] >= self.n:
+                raise AttributeError(f"Destination row is out of bounds: {destination[0]}")
+            if destination[1] < 0 or destination[1] >= self.m:
+                raise AttributeError(f"Destination column is out of bounds: {destination[1]}")
+
+
+    def is_complete_path(self, path: Path) -> bool:
+        return self.why_complete_path(path)[0]
+
+    def why_complete_path(self, path: Path) -> Tuple[bool, str]:
+        """Returns True if the given path goes from any origin to any destination"""
+        valid = self.why_valid_path(path)
+        if not valid[0]:
+            return valid
+
+        if path[0] not in self.origins:
+            return False, f"Path does not start in any origin {self.origins}"
+        if path[-1] not in self.destinations:
+            return False, f"Path does not end in any destination {self.destinations}"
+        return True, "Complete path"
+
+
+    def __str__(self):
+        """Returns a string representation of the terrain"""
+        max_length = len(str(self.matrix.max()))
+        s = "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        for i in range(self.n):
+            for j in range(self.m):
+                s += "|"
+                if (i,j) in self.origins and (i,j) in self.destinations:
+                    s += "* "
+                elif (i,j) in self.origins:
+                    s += "O "
+                elif (i,j) in self.destinations:
+                    s += "X "
+                else:
+                    s += "  "
+                s += str(self[(i,j)]).rjust(max_length) + " "
+            s += "|\n"
+            s += "+" + ("-" * (max_length + 3) + "+") * self.m + "\n"
+        return s
+
+
+    def get_origins(self) -> Set[Coordinate]:
+        return self.origins
 
 
     def get_destinations(self) -> Set[Coordinate]:
@@ -424,3 +543,6 @@ class SequentialDestinationTerrain (NoPathTerrain):
 
     def get_destinations(self) -> List[Coordinate]:
         return self.destinations
+
+    def get_origins(self) -> List[Coordinate]:
+        return [self.origin]

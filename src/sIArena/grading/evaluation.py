@@ -90,11 +90,21 @@ class GraderTestSuite:
                 load_error_message=str(exc),
             )
 
-        function_result = self.evaluate_function(
-            submission.search_function,
-            iterations=iterations,
-            debug=debug,
-        )
+        try:
+            function_result = self.evaluate_function(
+                submission.search_function,
+                iterations=iterations,
+                debug=debug,
+            )
+        except BaseException as exc:
+            message = _extract_last_error_line(str(exc))
+            return NotebookEvaluationResult(
+                submission=submission,
+                function_result=None,
+                comments=message,
+                load_error_type=type(exc).__name__,
+                load_error_message=str(exc),
+            )
         comments = function_result.comments
         return NotebookEvaluationResult(
             submission=submission,
@@ -143,7 +153,7 @@ class GraderTestSuite:
                 debug=debug,
                 max_seconds=timeout_seconds,
             )
-        except Exception as exc:
+        except BaseException as exc:
             return TerrainEvaluationResult(
                 terrain_case=terrain_case,
                 function_name=function_name,

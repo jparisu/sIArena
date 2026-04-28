@@ -5,6 +5,7 @@ from typing import Callable, Dict
 
 from sIArena.terrain.Terrain import (
     Coordinate,
+    MultiEndpointTerrain,
     MultipleDestinationTerrain,
     Path,
     SequentialDestinationTerrain,
@@ -191,3 +192,28 @@ def solve_multiple_destinations(
                 visited_destinations.add(coordinate)
 
     return full_path
+
+
+def solve_any_origin_any_destination(
+    terrain: MultiEndpointTerrain,
+    solve_segment: SegmentSolver,
+) -> Path:
+    origins = terrain.get_origins()
+    destinations = terrain.get_destinations()
+    if not origins:
+        raise ValueError("Terrain must define at least one origin")
+    if not destinations:
+        raise ValueError("Terrain must define at least one destination")
+
+    best_path = None
+    best_cost = float("inf")
+
+    for start in sorted(origins):
+        for goal in sorted(destinations):
+            path = solve_segment(start, goal)
+            cost = terrain.get_path_cost(path)
+            if cost < best_cost:
+                best_path = path
+                best_cost = cost
+
+    return best_path
