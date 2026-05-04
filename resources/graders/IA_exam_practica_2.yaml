@@ -136,3 +136,34 @@ tests:
         - [580, 390]
         - [600, 370]
         - [560, 410]
+
+  - id: multi-rafting
+    generator: PerlinGenerator
+    seeds: [43]
+    parameters:
+      n: 800
+      m: 800
+      min_height: 0
+      max_height: 1000
+      min_step: 10
+      abruptness: 0.14
+      origin:
+        - [500, 300]
+        - [1, 1]
+        - [1, 2]
+        - [1, 3]
+        - [1, 4]
+        - [2, 1]
+        - [2, 2]
+        - [2, 3]
+        - [2, 4]
+        - [3, 1]
+        - [3, 2]
+        - [3, 3]
+        - [3, 4]
+        - [4, 1]
+        - [4, 2]
+        - [4, 3]
+        - [4, 4]
+      destination:
+        - [600, 600]

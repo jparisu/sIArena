@@ -1,0 +1,50 @@
+version: 1
+
+assignment:
+  id: IA_exam_practica_2
+  notebook_function: path_finding
+  author_from: file_stem
+  author_pattern: null
+
+defaults:
+  oracle: a_star
+  terrain_type: MultiEndpointTerrain
+  time_limits:
+    max_seconds: 60.0
+
+tests:
+
+  - id: empty
+    generator: PerlinGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 7
+      m: 7
+      min_height: 0
+      max_height: 0
+      min_step: 1
+      abruptness: 0.0
+      origin:
+        - [4, 0]
+        - [0, 0]
+        - [6, 6]
+      destination:
+        - [6, 1]
+        - [1, 6]
+        - [3, 3]
+
+  - id: dodge
+    generator: MazeGenerator
+    seeds: [43, 44, 45, 46, 47]
+    parameters:
+      n: 7
+      m: 7
+      min_height: 0
+      max_height: 0
+      min_step: 1
+      abruptness: 0.0
+      origin: [4, 0]
+      destination:
+        - [6, 0]
+        - [1, 2]
+        - [5, 4]
