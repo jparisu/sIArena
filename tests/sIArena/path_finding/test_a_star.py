@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from sIArena.path_finding import a_star, dijkstra, heuristic
 from sIArena.terrain.Terrain import (
@@ -97,3 +98,22 @@ class TestPathFindingDispatch(unittest.TestCase):
         self.assertEqual(terrain.get_path_cost(dijkstra_path), 1)
         self.assertEqual(a_star_path, [(2, 0), (2, 1)])
         self.assertEqual(dijkstra_path, [(2, 0), (2, 1)])
+
+    def test_multi_endpoint_terrain_uses_single_multi_source_search(self):
+        terrain = MultiEndpointTerrain(
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+            origin={(0, 0), (2, 0)},
+            destination={(0, 2), (2, 1)},
+        )
+
+        with patch.object(
+            terrain,
+            "get_path_cost",
+            side_effect=AssertionError(
+                "Multi-endpoint solving should not compare separate origin/destination paths"
+            ),
+        ):
+            path = a_star(terrain)
+
+        self.assertTrue(terrain.is_complete_path(path))
+        self.assertEqual(path, [(2, 0), (2, 1)])

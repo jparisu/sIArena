@@ -51,10 +51,7 @@ def _solve_multiple_destination_terrain(
 def _solve_multi_endpoint_terrain(
     terrain: MultiEndpointTerrain,
 ) -> Path:
-    return solve_any_origin_any_destination(
-        terrain,
-        lambda start, goal: shortest_path(terrain, start, goal, heuristic),
-    )
+    return solve_any_origin_any_destination(terrain, heuristic)
 
 
 def a_star(terrain: Terrain) -> Path:

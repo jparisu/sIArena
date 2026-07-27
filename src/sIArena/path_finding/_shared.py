@@ -62,6 +62,62 @@ def shortest_path(
     raise ValueError(f"No path found from {start} to {goal}")
 
 
+def shortest_path_any_goal(
+    terrain: Terrain,
+    starts: list[Coordinate],
+    goals: list[Coordinate],
+    heuristic: Heuristic,
+) -> Path:
+    if not starts:
+        raise ValueError("At least one start is required")
+    if not goals:
+        raise ValueError("At least one goal is required")
+
+    goal_set = set(goals)
+    ordered_goals = sorted(goal_set)
+
+    for start in starts:
+        if start in goal_set:
+            return [start]
+
+    def estimate_cost(current: Coordinate) -> float:
+        return min(
+            heuristic(terrain, current, goal)
+            for goal in ordered_goals
+        )
+
+    open_heap = []
+    came_from: Dict[Coordinate, Coordinate] = {}
+    g_score: Dict[Coordinate, float] = {}
+
+    for start in sorted(set(starts)):
+        g_score[start] = 0.0
+        heapq.heappush(open_heap, (estimate_cost(start), 0.0, start))
+
+    while open_heap:
+        _, current_g, current = heapq.heappop(open_heap)
+
+        if current_g > g_score.get(current, float("inf")):
+            continue
+
+        if current in goal_set:
+            return reconstruct_path(came_from, current)
+
+        for neighbor in terrain.get_neighbors(current):
+            tentative_g = current_g + terrain.get_cost(current, neighbor)
+
+            if tentative_g < g_score.get(neighbor, float("inf")):
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g
+                f_score = tentative_g + estimate_cost(neighbor)
+                heapq.heappush(open_heap, (f_score, tentative_g, neighbor))
+
+    raise ValueError(
+        f"No path found from any start in {sorted(set(starts))} "
+        f"to any goal in {ordered_goals}"
+    )
+
+
 def extend_path(base_path: Path, segment: Path) -> Path:
     if len(segment) == 0:
         raise ValueError("Path segment cannot be empty")
@@ -196,7 +252,7 @@ def solve_multiple_destinations(
 
 def solve_any_origin_any_destination(
     terrain: MultiEndpointTerrain,
-    solve_segment: SegmentSolver,
+    heuristic: Heuristic,
 ) -> Path:
     origins = terrain.get_origins()
     destinations = terrain.get_destinations()
@@ -205,15 +261,9 @@ def solve_any_origin_any_destination(
     if not destinations:
         raise ValueError("Terrain must define at least one destination")
 
-    best_path = None
-    best_cost = float("inf")
-
-    for start in sorted(origins):
-        for goal in sorted(destinations):
-            path = solve_segment(start, goal)
-            cost = terrain.get_path_cost(path)
-            if cost < best_cost:
-                best_path = path
-                best_cost = cost
-
-    return best_path
+    return shortest_path_any_goal(
+        terrain,
+        list(origins),
+        list(destinations),
+        heuristic,
+    )
